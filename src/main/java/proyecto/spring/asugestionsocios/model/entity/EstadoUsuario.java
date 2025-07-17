@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 public enum EstadoUsuario {
     SIN_VALIDAR,

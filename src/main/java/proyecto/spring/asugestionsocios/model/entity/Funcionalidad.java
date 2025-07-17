@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class Funcionalidad {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 50, unique = true)
     private String nombre;
 
     @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)

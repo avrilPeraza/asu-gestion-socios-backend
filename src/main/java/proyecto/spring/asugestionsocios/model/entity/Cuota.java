@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,10 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter

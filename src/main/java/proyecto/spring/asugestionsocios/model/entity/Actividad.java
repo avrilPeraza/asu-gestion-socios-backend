@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +23,7 @@ public class Actividad {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
     @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)

@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,23 +7,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "perfil")
-public class Perfil {
+@Table(name = "tipo_actividad")
+public class TipoActividad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
     @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)
@@ -33,12 +31,11 @@ public class Perfil {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
-    @ManyToMany(mappedBy = "perfiles")
+    @OneToMany(mappedBy = "tipoActividad")
     @ToString.Exclude
-    private List<Funcionalidad> funcionalidades = new ArrayList<>();
+    private List<Actividad> actividades = new ArrayList<>();
 
-    @OneToMany(mappedBy = "perfil")
-    @ToString.Exclude
-    private List<Usuario> usuarios = new ArrayList<>();
+    @OneToOne(mappedBy = "tipoActividad")
+    private BajaTipoActividad bajaTipoActividad;
 
 }

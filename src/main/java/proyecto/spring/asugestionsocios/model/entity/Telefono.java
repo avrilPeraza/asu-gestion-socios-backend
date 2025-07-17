@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,19 +21,17 @@ public class Telefono {
     @Column(name = "numero", nullable = false, length = 20)
     private String numero;
 
+    @Column(name = "tipo_telefono", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private TipoTelefono tipoTelefono;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "localidad_id", nullable = false)
     @ToString.Exclude
     private Localidad localidad;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tipo_telefono_id", nullable = false)
-    @ToString.Exclude
-    private TipoTelefono tipoTelefono;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
     @ToString.Exclude
     private Usuario usuario;
-
 }

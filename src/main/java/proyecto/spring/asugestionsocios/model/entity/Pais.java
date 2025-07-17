@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,27 +7,28 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "tipo_telefono")
-public class TipoTelefono {
+@Table(name = "pais")
+public class Pais {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 50, unique = true)
     private String nombre;
 
-    @OneToMany(mappedBy = "tipoTelefono")
+    @Column(name = "prefijo", nullable = false, length = 150, unique = true)
+    private String prefijo;
+
+    @OneToMany(mappedBy = "pais")
     @ToString.Exclude
-    private List<Telefono> telefonos = new ArrayList<>();
+    private List<Localidad> localidades = new ArrayList<>();
 
 }

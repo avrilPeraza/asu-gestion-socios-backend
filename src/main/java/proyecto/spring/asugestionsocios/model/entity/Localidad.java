@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,9 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -23,10 +21,10 @@ public class Localidad {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100, unique = true)
     private String nombre;
 
-    @Column(name = "codigo_area", nullable = false, length = 50)
+    @Column(name = "codigo_area", nullable = false, length = 50, unique = true)
     private String codigoArea;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

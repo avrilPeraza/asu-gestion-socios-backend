@@ -1,21 +1,17 @@
-package proyecto.spring.asugestionsocios.models;
+package proyecto.spring.asugestionsocios.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "usuario")
 public class Usuario {
@@ -28,14 +24,11 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private TipoDocumento tipoDocumento;
 
-    @Column(name = "documento", nullable = false, length = 20)
+    @Column(name = "documento", nullable = false, length = 20, unique = true)
     private String documento;
 
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
-
-    @Column(name = "nro_asociado", nullable = false, length = 50)
-    private String numAsociado;
 
     @Column(name = "nombres", nullable = false, length = 50)
     private String nombres;
@@ -77,11 +70,6 @@ public class Usuario {
     @JoinColumn(name = "subcomision_id", nullable = false)
     @ToString.Exclude
     private Subcomision subcomision;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "categoria_cliente_id", nullable = false)
-    @ToString.Exclude
-    private CategoriaCliente categoriaCliente;
 
     @OneToMany(mappedBy = "usuario")
     @ToString.Exclude
