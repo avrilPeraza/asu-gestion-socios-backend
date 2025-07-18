@@ -35,11 +35,8 @@ public class Funcionalidad {
     @ToString.Exclude
     private List<Auditoria> auditorias = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "funcionalidad_perfil",
-    joinColumns = @JoinColumn(name = "funcionalidad_id"),
-    inverseJoinColumns = @JoinColumn(name = "perfil_id"))
+    @OneToMany(mappedBy = "funcionalidad")
     @ToString.Exclude
-    private List<Perfil> perfiles = new ArrayList<>();
+    private List<FuncionalidadPerfil> funcionalidadPerfiles = new ArrayList<>();
 
 }

@@ -31,9 +31,9 @@ public class Perfil {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
-    @ManyToMany(mappedBy = "perfiles")
+    @OneToMany(mappedBy = "perfil")
     @ToString.Exclude
-    private List<Funcionalidad> funcionalidades = new ArrayList<>();
+    private List<FuncionalidadPerfil> funcionalidades = new ArrayList<>();
 
     @OneToMany(mappedBy = "perfil")
     @ToString.Exclude
