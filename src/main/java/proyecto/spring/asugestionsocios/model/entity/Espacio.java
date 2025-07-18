@@ -45,6 +45,9 @@ public class Espacio {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
+    @Column(name = "observaciones", length = Integer.MAX_VALUE)
+    private String observaciones;
+
     @OneToMany(mappedBy = "espacio")
     @ToString.Exclude
     private List<Actividad> actividades = new ArrayList<>();

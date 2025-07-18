@@ -51,6 +51,9 @@ public class Reserva {
     @Column(name = "saldo_pendiente", nullable = false, precision = 10, scale = 2)
     private BigDecimal saldoPendiente;
 
+    @Column(name = "estado", nullable = false, length = 20)
+    private EstadoReserva estadoReserva;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
     @ToString.Exclude
