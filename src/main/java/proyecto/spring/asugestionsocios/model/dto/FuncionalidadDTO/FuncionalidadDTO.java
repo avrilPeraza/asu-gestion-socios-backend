@@ -1,10 +1,10 @@
-package proyecto.spring.asugestionsocios.model.dto.PerfilDTO;
+package proyecto.spring.asugestionsocios.model.dto.FuncionalidadDTO;
 
 import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.Estado;
 
 @Data
-public class PerfilDTO {
+public class FuncionalidadDTO {
     private Long id;
     private String nombre;
     private String descripcion;

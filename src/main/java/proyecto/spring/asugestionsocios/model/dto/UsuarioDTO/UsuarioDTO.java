@@ -1,6 +1,5 @@
 package proyecto.spring.asugestionsocios.model.dto.UsuarioDTO;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import proyecto.spring.asugestionsocios.model.dto.PerfilDTO.PerfilDTO;
 import proyecto.spring.asugestionsocios.model.entity.*;

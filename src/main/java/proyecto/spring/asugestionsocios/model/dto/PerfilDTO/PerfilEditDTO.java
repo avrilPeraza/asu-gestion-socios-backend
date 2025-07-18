@@ -4,9 +4,8 @@ import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.Estado;
 
 @Data
-public class PerfilDTO {
+public class PerfilEditDTO {
     private Long id;
-    private String nombre;
     private String descripcion;
     private Estado estado;
 }

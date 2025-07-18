@@ -3,8 +3,6 @@ package proyecto.spring.asugestionsocios.model.dto.UsuarioDTO;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class UsuarioEditDTO {
@@ -16,7 +14,6 @@ public class UsuarioEditDTO {
     private String numPuerta;
     private String apartamento;
     private Long perfilId;
-    private List<TelefonoDTO> telefonos = new ArrayList<>();
     private String contrasenia;
     private Boolean usoLenguajeSenia = false;
     private Boolean difAuditiva = false;
