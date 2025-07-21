@@ -1,6 +1,6 @@
 package proyecto.spring.asugestionsocios.model.entity;
 
-public enum status {
+public enum Status {
     ACTIVE,
     INACTIVE
 }

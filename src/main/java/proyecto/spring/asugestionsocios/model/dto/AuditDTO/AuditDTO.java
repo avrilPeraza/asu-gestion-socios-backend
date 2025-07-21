@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @Data
 public class AuditDTO {
     private Long id;
-    private LocalDateTime dateTime;
-    private String terminal;
+    private LocalDateTime dateTime;    private String terminal;
     private String description;
     private FeatureDTO feature;
     private UserDTO user;
+
 }

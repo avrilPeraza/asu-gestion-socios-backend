@@ -29,7 +29,7 @@ public class Profile {
 
     @Column(name = "estado", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private status status;
+    private Status status;
 
     @OneToMany(mappedBy = "profile")
     @ToString.Exclude

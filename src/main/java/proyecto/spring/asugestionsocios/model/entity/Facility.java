@@ -43,7 +43,7 @@ public class Facility {
 
     @Column(name = "estado", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private status status;
+    private Status status;
 
     @Column(name = "observaciones", length = Integer.MAX_VALUE)
     private String observations;

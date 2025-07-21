@@ -1,7 +1,7 @@
 package proyecto.spring.asugestionsocios.model.dto.FacilityDTO;
 
 import lombok.Data;
-import proyecto.spring.asugestionsocios.model.entity.status;
+import proyecto.spring.asugestionsocios.model.entity.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,5 +16,5 @@ public class FacilityDTO {
     private BigDecimal memberRate;
     private LocalDate priceEffectiveDate;
     private String observations;
-    private status status;
+    private Status status;
 }

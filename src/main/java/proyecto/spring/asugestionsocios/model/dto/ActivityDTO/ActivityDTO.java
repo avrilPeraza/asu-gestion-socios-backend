@@ -1,7 +1,7 @@
 package proyecto.spring.asugestionsocios.model.dto.ActivityDTO;
 
 import lombok.Data;
-import proyecto.spring.asugestionsocios.model.entity.status;
+import proyecto.spring.asugestionsocios.model.entity.Status;
 import proyecto.spring.asugestionsocios.model.entity.MethodPayment;
 import proyecto.spring.asugestionsocios.model.entity.ActivityType;
 
@@ -20,6 +20,6 @@ public class ActivityDTO {
     private LocalDateTime openingDateInscription;
     private String observations;
     private Boolean hasInscription = false;
-    private status status;
+    private Status status;
     private ActivityType activityType;
 }
