@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 public class FeatureProfileId implements Serializable {
-    @Column(name = "funcionalidad_id")
+    @Column(name = "feature_id")
     private Long featureId;
 
-    @Column(name = "perfil_id")
+    @Column(name = "profile_id")
     private Long profileId;
 }

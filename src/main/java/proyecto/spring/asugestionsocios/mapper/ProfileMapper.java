@@ -1,6 +1,7 @@
 package proyecto.spring.asugestionsocios.mapper;
 
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileCreateDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileUpdateDTO;

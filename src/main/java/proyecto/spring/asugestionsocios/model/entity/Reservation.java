@@ -17,50 +17,51 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "reserva")
+@Table(name = "reservation")
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "fecha_hora", nullable = false)
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(name = "duracion", nullable = false)
+    @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    @Column(name = "cantidad_personas", nullable = false)
+    @Column(name = "number_people", nullable = false)
     private Short numberPeople;
 
-    @Column(name = "importe_total", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "fecha_vencimiento_senia", nullable = false)
+    @Column(name = "expiration_date_deposit", nullable = false)
     private LocalDate expirationDateDeposit;
 
-    @Column(name = "importe_senia", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_deposit", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalDeposit;
 
-    @Column(name = "fecha_pago_senia", nullable = false)
+    @Column(name = "deposit_payment_date", nullable = false)
     private LocalDate depositPaymentDate;
 
-    @Column(name = "senia_pagada", nullable = false, precision = 10, scale = 2)
+    @Column(name = "deposit_paid", nullable = false, precision = 10, scale = 2)
     private BigDecimal depositPaid;
 
-    @Column(name = "saldo_pendiente", nullable = false, precision = 10, scale = 2)
+    @Column(name = "outstanding_balance", nullable = false, precision = 10, scale = 2)
     private BigDecimal outstandingBalance;
 
-    @Column(name = "estado", nullable = false, length = 20)
+    @Column(name = "reservation_status", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "espacio_id", nullable = false)
+    @JoinColumn(name = "facility_id", nullable = false)
     @ToString.Exclude
     private Facility facility;
 

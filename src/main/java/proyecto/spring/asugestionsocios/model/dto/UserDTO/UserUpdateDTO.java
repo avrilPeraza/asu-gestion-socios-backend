@@ -21,14 +21,6 @@ public class UserUpdateDTO {
     @Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters long")
     private String lastName;
 
-    @NotNull(message = "Document type is mandatory")
-    private DocumentType documentType;
-
-    @NotBlank(message = "Document is mandatory")
-    //TODO: Looks for document formant
-    //@Size(min = 2, message = "")
-    private String document;
-
     @NotNull(message = "Birthdate is mandatory")
     @Past(message = "Birthdate must be in the past")
     private LocalDate birthdate;
@@ -52,16 +44,12 @@ public class UserUpdateDTO {
             message = "Password must be at least 8 characters long, and include at least one uppercase letter, one lowercase letter, and one number")
     private String password;
 
-    @NotNull(message = "Profile is mandatory")
-    private Long profileId;
-
     @NotNull(message = "Phones is mandatory")
     @Size(min = 1, message = "At least one phone is required")
     private List<PhoneCreateDTO> phones = new ArrayList<>();
 
     private Boolean usesSignLanguage = false;
-
     private Boolean hasHearingImpairment = false;
-
+    private Boolean belongsToCommittee = false;
     private Long subcommitteeId;
 }

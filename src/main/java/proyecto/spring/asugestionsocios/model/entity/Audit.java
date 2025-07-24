@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "auditoria")
+@Table(name = "audit")
 public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,22 +22,22 @@ public class Audit {
     private Long id;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "fecha_hora")
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
     @Column(name = "terminal", nullable = false, length = 100)
     private String terminal;
 
-    @Column(name = "descripcion", length = Integer.MAX_VALUE)
+    @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "funcionalidad_id", nullable = false)
+    @JoinColumn(name = "feature_id", nullable = false)
     @ToString.Exclude
     private Feature feature;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
 }

@@ -16,52 +16,52 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "actividad")
+@Table(name = "activity")
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100, unique = true)
+    @Column(name = "name", nullable = false, length = 100, unique = true)
     private String name;
 
-    @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "duracion", nullable = false)
+    @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    @Column(name = "costo_ticket", nullable = false, precision = 10, scale = 2)
+    @Column(name = "ticket_cost", nullable = false, precision = 10, scale = 2)
     private BigDecimal ticketCost;
 
-    @Column(name = "forma_pago", nullable = false, length = 50)
+    @Column(name = "method_payment", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private MethodPayment methodPayment;
 
-    @Column(name = "fecha_hora", nullable = false)
+    @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(name = "fch_apertura_insc", nullable = false)
+    @Column(name = "opening_date_inscription", nullable = false)
     private LocalDateTime openingDateInscription;
 
-    @Column(name = "observaciones", length = Integer.MAX_VALUE)
+    @Column(name = "observations", length = Integer.MAX_VALUE)
     private String observations;
 
-    @Column(name = "inscripcion", nullable = false)
+    @Column(name = "has_inscription", nullable = false)
     private Boolean hasInscription = false;
 
-    @Column(name = "estado", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tipo_actividad_id", nullable = false)
+    @JoinColumn(name = "activity_type_id", nullable = false)
     @ToString.Exclude
     private ActivityType activityType;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "espacio_id", nullable = false)
+    @JoinColumn(name = "facility_id", nullable = false)
     @ToString.Exclude
     private Facility facility;
 

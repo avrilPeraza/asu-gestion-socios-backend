@@ -14,17 +14,17 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "subcomision")
+@Table(name = "subcommittee")
 public class Subcommittee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 50, unique = true)
+    @Column(name = "name", nullable = false, length = 50, unique = true)
     private String name;
 
-    @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
     @OneToMany(mappedBy = "subcommittee")

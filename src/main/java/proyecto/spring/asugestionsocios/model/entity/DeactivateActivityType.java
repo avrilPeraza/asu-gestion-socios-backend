@@ -14,29 +14,29 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "baja_tipo_actividad")
+@Table(name = "deactivate_activity_type")
 public class DeactivateActivityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "comentario", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
     private String comment;
 
-    @Column(name = "razon", nullable = false, length = 200)
+    @Column(name = "reason", nullable = false, length = 200)
     private String reason;
 
-    @Column(name = "fecha", nullable = false)
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "tipo_actividad_id", nullable = false)
+    @JoinColumn(name = "activity_type_id", nullable = false)
     @ToString.Exclude
     private ActivityType activityType;
 

@@ -1,14 +1,17 @@
 package proyecto.spring.asugestionsocios.model.dto.UserDTO;
 
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.DocumentType;
+import proyecto.spring.asugestionsocios.util.FormatDocument;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@FormatDocument(message = "Format document invalid")
 public class UserCreateDTO {
     @NotBlank(message = "First name is mandatory")
     @Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters long")
@@ -22,8 +25,6 @@ public class UserCreateDTO {
     private DocumentType documentType;
 
     @NotBlank(message = "Document is mandatory")
-    //TODO: Looks for document formant
-    //@Size(min = 2, message = "")
     private String document;
 
     @NotNull(message = "Birthdate is mandatory")
@@ -62,6 +63,7 @@ public class UserCreateDTO {
 
     private Boolean usesSignLanguage = false;
     private Boolean hasHearingImpairment = false;
+    private Boolean belongsToCommittee = false;
     private Long subcommitteeId;
 
 }

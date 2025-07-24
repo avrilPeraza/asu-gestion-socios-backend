@@ -16,10 +16,10 @@ import java.util.Objects;
 public class EnrollmentId implements Serializable {
     @Serial
     private static final long serialVersionUID = 740801641592048827L;
-    @Column(name = "usuario_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "actividad_id", nullable = false)
+    @Column(name = "activity_id", nullable = false)
     private Long activityId;
 
     @Override

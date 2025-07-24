@@ -25,6 +25,8 @@ public class UserDTO {
     private String houseNumber;
     private String apartment;
     private ProfileDTO profile;
+    private Boolean belongsToCommittee = false;
     private SubcommitteeDTO subcommittee;
     private List<PhoneDTO> phones = new ArrayList<>();
+    private String memberNumber;
 }

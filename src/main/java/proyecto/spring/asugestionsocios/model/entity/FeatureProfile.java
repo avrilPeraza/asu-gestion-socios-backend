@@ -7,22 +7,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "funcionalidad_perfil")
+@Table(name = "feature_profile")
 public class FeatureProfile {
     @EmbeddedId
     private FeatureProfileId featureProfileId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("funcionalidadId")
-    @JoinColumn(name = "funcionalidad_id")
+    @MapsId("featureId")
+    @JoinColumn(name = "feature_id")
     private Feature feature;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("perfilId")
-    @JoinColumn(name = "perfil_id")
+    @MapsId("profileId")
+    @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    @Column(name = "acceso", nullable = false)
+    @Column(name = "has_permission_state", nullable = false)
     @Enumerated(EnumType.STRING)
     private PermissionState hasPermissionState;
 

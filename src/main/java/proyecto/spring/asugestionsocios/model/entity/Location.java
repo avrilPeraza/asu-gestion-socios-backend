@@ -14,21 +14,21 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "localidad")
+@Table(name = "location")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100, unique = true)
+    @Column(name = "name", nullable = false, length = 100, unique = true)
     private String name;
 
-    @Column(name = "codigo_area", nullable = false, length = 50, unique = true)
+    @Column(name = "area_code", nullable = false, length = 50, unique = true)
     private String areaCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pais_id", nullable = false)
+    @JoinColumn(name = "country_id", nullable = false)
     @ToString.Exclude
     private Country country;
 

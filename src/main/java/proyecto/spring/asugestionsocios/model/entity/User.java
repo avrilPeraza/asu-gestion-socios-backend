@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "usuario")
+@Table(name = "app_user")
 @AllArgsConstructor
 public class User {
     @Id
@@ -21,54 +21,63 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "tipo_documento", nullable = false, length = 50)
+    @Column(name = "document_type", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
 
-    @Column(name = "documento", nullable = false, length = 20, unique = true)
+    @Column(name = "document", nullable = false, length = 20, unique = true)
     private String document;
 
     @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
-    @Column(name = "nombres", nullable = false, length = 50)
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "apellidos", nullable = false, length = 50)
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "fecha_nacimiento", nullable = false)
+    @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @Column(name = "contrasenia", nullable = false, length = 100)
+    @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @Column(name = "estado", nullable = false, length = 50)
+    @Column(name = "member_number", nullable = false, length = 15, unique = true)
+    private String memberNumber;
+
+    @Column(name = "status", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @Column(name = "uso_lenguaje_senia", nullable = false)
+    @Column(name = "uses_sign_language", nullable = false)
     private Boolean usesSignLanguage = false;
 
-    @Column(name = "dif_auditiva", nullable = false)
+    @Column(name = "has_hearing_impairment", nullable = false)
     private Boolean hasHearingImpairment = false;
 
-    @Column(name = "calle", nullable = false, length = 50)
+    @Column(name = "street", nullable = false, length = 50)
     private String street;
 
-    @Column(name = "nro_puerta", nullable = false, length = 20)
+    @Column(name = "house_number", nullable = false, length = 20)
     private String houseNumber;
 
-    @Column(name = "apartamento", nullable = false, length = 20)
+    @Column(name = "apartment", nullable = false, length = 20)
     private String apartment;
 
+    @Column(name = "belongs_to_committee", nullable = false)
+    private Boolean belongsToCommittee;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "perfil_id", nullable = false)
+    @JoinColumn(name = "profile_id", nullable = false)
     @ToString.Exclude
     private Profile profile;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "subcomision_id", nullable = false)
+    @JoinColumn(name = "subcommittee_id")
     @ToString.Exclude
     private Subcommittee subcommittee;
 

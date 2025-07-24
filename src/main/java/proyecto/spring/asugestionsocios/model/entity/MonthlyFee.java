@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "cuota")
+@Table(name = "monthly_fee")
 public class MonthlyFee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nro_cuota", nullable = false)
+    @Column(name = "monthly_fee_number", nullable = false)
     private Integer monthlyFeeNumber;
 
-    @Column(name = "total_anual_cuota", nullable = false)
+    @Column(name = "total_annual_monthly_fee", nullable = false)
     private Integer totalAnnualMonthlyFee;
 
-    @Column(name = "fecha_vencimiento", nullable = false)
+    @Column(name = "payment_due_date", nullable = false)
     private LocalDateTime paymentDueDate;
 }

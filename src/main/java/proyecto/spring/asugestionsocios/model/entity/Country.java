@@ -14,17 +14,17 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "pais")
+@Table(name = "country")
 public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 50, unique = true)
+    @Column(name = "name", nullable = false, length = 50, unique = true)
     private String name;
 
-    @Column(name = "prefijo", nullable = false, length = 150, unique = true)
+    @Column(name = "prefix", nullable = false, length = 150, unique = true)
     private String prefix;
 
     @OneToMany(mappedBy = "country")

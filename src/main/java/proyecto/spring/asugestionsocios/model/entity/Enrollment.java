@@ -13,28 +13,27 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "actividad_usuario")
+@Table(name = "enrollment")
 public class Enrollment {
     @EmbeddedId
     private EnrollmentId id;
 
     @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
 
     @MapsId("activityId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "actividad_id", nullable = false)
+    @JoinColumn(name = "activity_id", nullable = false)
     @ToString.Exclude
     private Activity activity;
 
-    @Column(name = "fecha_inscripcion", nullable = false)
+    @Column(name = "registration_date", nullable = false)
     private LocalDate registrationDate;
 
-    @Column(name = "estado", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private EnrollmentStatus enrollmentStatus;
-
 }

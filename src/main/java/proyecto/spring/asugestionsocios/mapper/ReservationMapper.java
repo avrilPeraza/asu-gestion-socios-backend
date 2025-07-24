@@ -1,6 +1,7 @@
 package proyecto.spring.asugestionsocios.mapper;
 
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import proyecto.spring.asugestionsocios.model.dto.FacilityDTO.ReservationCreateDTO;
 import proyecto.spring.asugestionsocios.model.dto.FacilityDTO.ReservationDTO;
 import proyecto.spring.asugestionsocios.model.entity.Reservation;

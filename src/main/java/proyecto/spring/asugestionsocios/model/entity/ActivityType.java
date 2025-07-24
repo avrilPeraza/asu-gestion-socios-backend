@@ -14,20 +14,20 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "tipo_actividad")
+@Table(name = "activity_type")
 public class ActivityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100, unique = true)
+    @Column(name = "name", nullable = false, length = 100, unique = true)
     private String name;
 
-    @Column(name = "descripcion", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "estado", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private Status status;
 
