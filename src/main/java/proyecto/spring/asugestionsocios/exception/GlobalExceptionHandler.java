@@ -1,14 +1,13 @@
 package proyecto.spring.asugestionsocios.exception;
 
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -19,13 +18,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class) //<- Indica que maneja las excepciones del tipo MethodArgumentNotValidException
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handlerValidationError(MethodArgumentNotValidException ex){
-        String messageError = ex.getBindingResult() //Obtiene el resultado de la validacion que fallo
-                .getFieldErrors()//Devuelve un lista de errores asociados a campos especificos del objeto validado
-                .stream()//Convierte en stream
-                .map(err -> err.getField() + ": " + err.getDefaultMessage()) //Mapea el resultado para que sea field: errorMessage
-                .collect(Collectors.joining(", ")); //Une los mensajes separando por ",".
+        String messageError = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageError);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handlerConstraintViolation(ConstraintViolationException ex){
+        String messageError = ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining(", "));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageError);
     }

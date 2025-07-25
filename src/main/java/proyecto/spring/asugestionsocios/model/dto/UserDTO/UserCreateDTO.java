@@ -1,17 +1,18 @@
 package proyecto.spring.asugestionsocios.model.dto.UserDTO;
 
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.DocumentType;
 import proyecto.spring.asugestionsocios.util.FormatDocument;
+import proyecto.spring.asugestionsocios.util.ValidUserMember;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@FormatDocument(message = "Format document invalid")
+@FormatDocument(message = "Invalid Document Format")
+@ValidUserMember
 public class UserCreateDTO {
     @NotBlank(message = "First name is mandatory")
     @Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters long")
@@ -44,7 +45,7 @@ public class UserCreateDTO {
     private String apartment;
 
     @NotBlank(message = "Email is mandatory")
-    @Email
+    @Email(message = "The email format is not valid")
     private String email;
 
     @NotBlank(message = "Password is mandatory")
@@ -59,7 +60,7 @@ public class UserCreateDTO {
 
     @NotNull(message = "Phones is mandatory")
     @Size(min = 1, message = "At least one phone is required")
-    private List<PhoneCreateDTO> phones = new ArrayList<>();
+    private List<PhoneRequestDTO> phones = new ArrayList<>();
 
     private Boolean usesSignLanguage = false;
     private Boolean hasHearingImpairment = false;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -24,7 +25,7 @@ public class MonthlyFee {
     private Integer monthlyFeeNumber;
 
     @Column(name = "total_annual_monthly_fee", nullable = false)
-    private Integer totalAnnualMonthlyFee;
+    private BigDecimal totalAnnualMonthlyFee;
 
     @Column(name = "payment_due_date", nullable = false)
     private LocalDateTime paymentDueDate;

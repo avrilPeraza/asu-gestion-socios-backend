@@ -8,6 +8,5 @@ import proyecto.spring.asugestionsocios.model.entity.Phone;
 public interface PhoneMapper {
     Phone toEntity(PhoneDTO phoneDTO);
     PhoneDTO toDto(Phone phone);
-    Phone toEntityCreate(PhoneCreateDTO phoneCreateDTO);
-    Phone toEntityUpdate(PhoneUpdateDTO phoneUpdateDTO);
+    Phone toEntityRequest(PhoneRequestDTO phoneRequestDTO);
 }

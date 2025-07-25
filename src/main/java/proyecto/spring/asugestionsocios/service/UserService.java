@@ -5,17 +5,16 @@ import org.springframework.stereotype.Service;
 import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.mapper.UserMapper;
 import proyecto.spring.asugestionsocios.model.dto.UserDTO.UserCreateDTO;
-import proyecto.spring.asugestionsocios.model.entity.Profile;
-import proyecto.spring.asugestionsocios.model.entity.Subcommittee;
-import proyecto.spring.asugestionsocios.model.entity.User;
-import proyecto.spring.asugestionsocios.model.entity.UserStatus;
+import proyecto.spring.asugestionsocios.model.dto.UserDTO.UserDTO;
+import proyecto.spring.asugestionsocios.model.entity.*;
 import proyecto.spring.asugestionsocios.repository.ProfileRepository;
 import proyecto.spring.asugestionsocios.repository.SubcommitteeRepository;
 import proyecto.spring.asugestionsocios.repository.UserRepository;
 import proyecto.spring.asugestionsocios.util.MemberNumberGenerator;
-import proyecto.spring.asugestionsocios.util.ValidateExists;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,35 +25,27 @@ public class UserService {
     private final ProfileRepository profileRepository;
     private final SubcommitteeRepository subcommitteeRepository;
     private final MemberNumberGenerator memberNumberGenerator;
-    private final ValidateExists validateExists;
+    private final PhoneService phoneService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, ProfileRepository  profileRepository, SubcommitteeRepository subcommitteeRepository, MemberNumberGenerator memberNumberGenerator, ValidateExists validateExists){
+    public UserService(UserRepository userRepository, UserMapper userMapper, ProfileRepository  profileRepository, SubcommitteeRepository subcommitteeRepository, MemberNumberGenerator memberNumberGenerator, PhoneService phoneService){
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.profileRepository = profileRepository;
         this.subcommitteeRepository = subcommitteeRepository;
         this.memberNumberGenerator = memberNumberGenerator;
-        this.validateExists = validateExists;
+        this.phoneService = phoneService;
     }
 
-    //TODO: Adds exceptions
     public void createUser(UserCreateDTO userCreateDTO){
 
-        if (validateExists.validateEmailExists(userCreateDTO.getEmail())){
+        if (userRepository.existsUserByEmail(userCreateDTO.getEmail())){
             throw new ConflictException("The email entered already exists in the system");
         }
 
-        //formato
-
-
-        if (validateExists.validateDocumentExists(userCreateDTO.getDocument())){
+        if (userRepository.existsUserByDocument(userCreateDTO.getDocument())){
             throw new ConflictException("The document entered already exists in the system");
         }
 
-
-
-
-        //Create User
         User.UserBuilder builder = User.builder()
                 .firstName(userCreateDTO.getFirstName())
                 .lastName(userCreateDTO.getLastName())
@@ -67,17 +58,15 @@ public class UserService {
                 .email(userCreateDTO.getEmail())
                 .password(userCreateDTO.getPassword());
 
-        //add another data
         addSpecificData(builder, userCreateDTO);
+        phoneService.validatePhoneNumbers(userCreateDTO.getPhones());
 
         User newUser = builder.build();
-
-        //Save user
         userRepository.save(newUser);
 
-        //Phone registered
-
+        phoneService.createPhonesUser(userCreateDTO.getPhones());
     }
+
 
     public void addSpecificData(User.UserBuilder builder, UserCreateDTO userCreateDTO){
         Optional<Profile> profile = profileRepository.findById(userCreateDTO.getProfileId());
@@ -89,19 +78,22 @@ public class UserService {
                                 new EntityNotFoundException("There's not a profile with ID: " + userCreateDTO.getProfileId()));
         switch (profileName){
             case "SOCIO":
+                String memberNumber = memberNumberGenerator.memberNumberGenerator(userCreateDTO.getProfileId());
+
                 builder.hasHearingImpairment(userCreateDTO.getHasHearingImpairment())
                         .usesSignLanguage(userCreateDTO.getUsesSignLanguage())
-                        .belongsToCommittee(userCreateDTO.getBelongsToCommittee());
+                        .belongsToCommittee(userCreateDTO.getBelongsToCommittee())
+                        .status(UserStatus.UNVALIDATED)
+                        .memberNumber(memberNumber)
+                        .createdAt(LocalDate.now());
 
-                if(Boolean.TRUE.equals(userCreateDTO.getBelongsToCommittee())&& userCreateDTO.getSubcommitteeId() != null){
+                if (userCreateDTO.getBelongsToCommittee()){
                     Subcommittee subcommittee = subcommitteeRepository
                             .findById(userCreateDTO.getSubcommitteeId())
                             .orElseThrow(() -> new EntityNotFoundException("There's not a subcommittee with ID: " + userCreateDTO.getSubcommitteeId()));
+
                     builder.subcommittee(subcommittee);
                 }
-
-                String memberNumber = memberNumberGenerator.memberNumberGenerator(userCreateDTO.getProfileId());
-                builder.status(UserStatus.UNVALIDATED).memberNumber(memberNumber).createdAt(LocalDate.now());
                 break;
             case "NO_SOCIO", "ADMINISTRADOR", "AUXILIAR_ADMINISTRATIVO":
                 builder.status(UserStatus.UNVALIDATED).createdAt(LocalDate.now());
@@ -111,9 +103,15 @@ public class UserService {
         }
     }
 
+    public List<UserDTO> getAllUsers(){
+        List<User> users = userRepository.findAll();
 
-    public Iterable<User> getAllUsers(){
-        return userRepository.findAll();
+        List<UserDTO> userDtos = new ArrayList<>();
+        for (User user : users){
+            userDtos.add(userMapper.toDto(user));
+        }
+
+        return userDtos;
     }
 
 

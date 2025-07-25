@@ -2,7 +2,6 @@ package proyecto.spring.asugestionsocios.model.dto.UserDTO;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import proyecto.spring.asugestionsocios.model.entity.DocumentType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class UserUpdateDTO {
 
     @NotNull(message = "Phones is mandatory")
     @Size(min = 1, message = "At least one phone is required")
-    private List<PhoneCreateDTO> phones = new ArrayList<>();
+    private List<PhoneRequestDTO> phones = new ArrayList<>();
 
     private Boolean usesSignLanguage = false;
     private Boolean hasHearingImpairment = false;

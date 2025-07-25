@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import proyecto.spring.asugestionsocios.model.dto.UserDTO.UserCreateDTO;
-import proyecto.spring.asugestionsocios.model.entity.User;
+import proyecto.spring.asugestionsocios.model.dto.UserDTO.UserDTO;
 import proyecto.spring.asugestionsocios.service.UserService;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -27,7 +29,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Iterable<User> getAllUsers(){
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }
