@@ -24,7 +24,7 @@ public class Location {
     @Column(name = "name", nullable = false, length = 100, unique = true)
     private String name;
 
-    @Column(name = "area_code", nullable = false, length = 50, unique = true)
+    @Column(name = "area_code", nullable = false, length = 50)
     private String areaCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

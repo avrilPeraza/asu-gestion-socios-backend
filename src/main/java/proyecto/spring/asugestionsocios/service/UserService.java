@@ -58,6 +58,9 @@ public class UserService {
                 .email(userCreateDTO.getEmail())
                 .password(userCreateDTO.getPassword());
 
+        Profile profile = profileRepository.findById(userCreateDTO.getProfileId()).orElse(null);
+        builder.profile(profile);
+
         addSpecificData(builder, userCreateDTO);
         phoneService.validatePhoneNumbers(userCreateDTO.getPhones());
 
@@ -96,7 +99,8 @@ public class UserService {
                 }
                 break;
             case "NO_SOCIO", "ADMINISTRADOR", "AUXILIAR_ADMINISTRATIVO":
-                builder.status(UserStatus.UNVALIDATED).createdAt(LocalDate.now());
+                builder.status(UserStatus.UNVALIDATED)
+                        .createdAt(LocalDate.now());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown profile: " + profileName);

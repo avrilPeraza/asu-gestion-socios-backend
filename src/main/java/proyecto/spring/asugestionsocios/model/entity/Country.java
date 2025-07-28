@@ -24,7 +24,7 @@ public class Country {
     @Column(name = "name", nullable = false, length = 50, unique = true)
     private String name;
 
-    @Column(name = "prefix", nullable = false, length = 150, unique = true)
+    @Column(name = "prefix", nullable = false, length = 150)
     private String prefix;
 
     @OneToMany(mappedBy = "country")

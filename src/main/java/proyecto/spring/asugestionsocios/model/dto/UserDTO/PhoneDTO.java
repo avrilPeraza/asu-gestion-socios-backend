@@ -8,5 +8,5 @@ public class PhoneDTO {
     private Long id;
     private String number;
     private PhoneType phoneType;
-    private LocationDTO locationId;
+    private LocationDTO location;
 }
