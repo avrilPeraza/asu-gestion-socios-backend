@@ -5,6 +5,7 @@ import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.mapper.PhoneMapper;
 import proyecto.spring.asugestionsocios.model.dto.UserDTO.PhoneRequestDTO;
 import proyecto.spring.asugestionsocios.model.entity.Phone;
+import proyecto.spring.asugestionsocios.model.entity.User;
 import proyecto.spring.asugestionsocios.repository.PhoneRepository;
 
 import java.util.List;
@@ -22,9 +23,10 @@ public class PhoneService {
         this.phoneMapper = phoneMapper;
     }
 
-    public void createPhonesUser(List<PhoneRequestDTO> phoneCreateDtos){
+    public void createPhonesUser(List<PhoneRequestDTO> phoneCreateDtos, User user){
         for (PhoneRequestDTO phoneDto : phoneCreateDtos){
             Phone newPhone = phoneMapper.toEntityRequest(phoneDto);
+            newPhone.setUser(user);
             phoneRepository.save(newPhone);
         }
     }

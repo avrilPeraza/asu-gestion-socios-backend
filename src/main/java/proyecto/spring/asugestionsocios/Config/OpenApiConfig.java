@@ -24,7 +24,8 @@ import org.springframework.context.annotation.Configuration;
         },
         security = @SecurityRequirement(name = "bearerAuth"),
         tags = {
-                @Tag(name = "User", description = "User management and authentication"),
+                @Tag(name = "Auth", description = "Authentication management"),
+                @Tag(name = "User", description = "User management"),
                 @Tag(name = "Activity", description = "Activity and enrollment management"),
                 @Tag(name = "Profile", description = "Profile management"),
                 @Tag(name = "Feature", description = "Feature management and authorization"),
