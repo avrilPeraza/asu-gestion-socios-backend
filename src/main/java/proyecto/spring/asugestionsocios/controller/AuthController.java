@@ -3,16 +3,14 @@ package proyecto.spring.asugestionsocios.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import proyecto.spring.asugestionsocios.model.AuthResponse;
 import proyecto.spring.asugestionsocios.model.ErrorResponse;
 import proyecto.spring.asugestionsocios.model.LoginUserDTO;
@@ -22,6 +20,7 @@ import proyecto.spring.asugestionsocios.service.AuthenticationService;
 @Tag(name = "Auth")
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     private final AuthenticationService authService;
@@ -56,12 +55,23 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new proyecto.spring.asugestionsocios.model.ApiResponse("Registered user successfully."));
     }
 
-    @PostMapping("/signIn")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User access successfully.",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = proyecto.spring.asugestionsocios.model.ApiResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid input data. Check required fields and formats.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorResponse.class))}
+            ),
+    })
+    @Operation(
+            summary = "Sign In",
+            description = "Access to the system."
+    )
+    @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginUserDTO userLogin){
         String token = authService.authenticate(userLogin);
         return ResponseEntity.ok(new AuthResponse(token));
     }
-
-
-
 }

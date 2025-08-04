@@ -1,11 +1,13 @@
 package proyecto.spring.asugestionsocios.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.model.LoginUserDTO;
 import proyecto.spring.asugestionsocios.model.UserDetailsImpl;
@@ -23,30 +25,32 @@ import proyecto.spring.asugestionsocios.util.auth.JwtUtils;
 import java.time.LocalDate;
 
 @Service
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final SubcommitteeRepository subcommitteeRepository;
     private final MemberNumberGenerator memberNumberGenerator;
-    private final PhoneService phoneService;
+    private final ContactService contactService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
 
-    public AuthenticationService(UserRepository userRepository, ProfileRepository  profileRepository, SubcommitteeRepository subcommitteeRepository, MemberNumberGenerator memberNumberGenerator, PhoneService phoneService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils){
+    public AuthenticationService(UserRepository userRepository, ProfileRepository  profileRepository, SubcommitteeRepository subcommitteeRepository, MemberNumberGenerator memberNumberGenerator, ContactService contactService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils){
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.subcommitteeRepository = subcommitteeRepository;
         this.memberNumberGenerator = memberNumberGenerator;
-        this.phoneService = phoneService;
+        this.contactService = contactService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
     public void createUser(UserCreateDTO userCreateDTO){
 
         if (userRepository.existsUserByEmail(userCreateDTO.getEmail())){
@@ -78,12 +82,13 @@ public class AuthenticationService {
             memberData(builder, userCreateDTO);
         }
 
-        phoneService.validatePhoneNumbers(userCreateDTO.getPhones());
+        contactService.validatePhoneNumbers(userCreateDTO.getPhones());
 
         User newUser = builder.build();
         userRepository.save(newUser);
 
-        phoneService.createPhonesUser(userCreateDTO.getPhones(), newUser);
+
+        contactService.createContactsUser(userCreateDTO.getPhones(), newUser);
     }
 
     public void memberData(User.UserBuilder builder, UserCreateDTO userCreateDTO){

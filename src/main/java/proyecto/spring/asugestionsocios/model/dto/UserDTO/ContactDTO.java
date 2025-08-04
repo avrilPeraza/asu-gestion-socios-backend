@@ -4,7 +4,7 @@ import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.PhoneType;
 
 @Data
-public class PhoneDTO {
+public class ContactDTO {
     private Long id;
     private String number;
     private PhoneType phoneType;

@@ -20,6 +20,15 @@ public class UserMemberValidator implements ConstraintValidator<ValidUserMember,
     public boolean isValid(UserCreateDTO userCreateDTO, ConstraintValidatorContext constraintValidatorContext) {
         if (userCreateDTO == null) return true;
 
+        // LOG TEMPORAL PARA DEBUG
+        System.out.println("DEBUG - ProfileId recibido: " + userCreateDTO.getProfileId());
+        System.out.println("DEBUG - ProfileId es null: " + (userCreateDTO.getProfileId() == null));
+
+        // Si profileId es null, dejar que @NotNull se encargue de esa validación
+        if (userCreateDTO.getProfileId() == null) {
+            return true; // No validamos aquí, @NotNull lo hará
+        }
+
         Optional<Profile> profile = profileRepository.findById(userCreateDTO.getProfileId());
 
         String profileName =

@@ -22,6 +22,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private String profile;
     private List<GrantedAuthority> authorities;
+    //private boolean isEnabled;
 
     public UserDetailsImpl(Long id, String email, String password, String profile, List<GrantedAuthority> authorities){
         this.id = id;
@@ -29,6 +30,7 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
         this.authorities = authorities;
         this.profile = profile;
+        //this.isEnabled = isEnabled;
     }
 
     public static UserDetailsImpl build(User user){
@@ -43,6 +45,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 user.getProfile().getName(),
                 authority
+                //user.getStatus() == UserStatus.ACTIVE
         );
     }
 
@@ -76,5 +79,4 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled(){
         return true;
     }
-
 }

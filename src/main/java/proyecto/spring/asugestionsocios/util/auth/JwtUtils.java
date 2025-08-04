@@ -50,7 +50,7 @@ public class JwtUtils {
                 .subject(email)
                 .claims(claims)
                 .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .expiration(new Date((new Date()).getTime() + Long.parseLong(jwtExpirationMs)))
                 .signWith(key())
                 .compact();
     }

@@ -12,13 +12,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT EXISTS (SELECT 1 FROM app_user WHERE email = :email)", nativeQuery = true)
     boolean existsUserByEmail(String email);
 
-    @Query(value = "SELECT EXISTS (SELECT 1 FROM app_user WHERE document = :docuemnt)", nativeQuery = true)
+    @Query(value = "SELECT EXISTS (SELECT 1 FROM app_user WHERE document = :document)", nativeQuery = true)
     boolean existsUserByDocument(String document);
 
     @Query(value = "SELECT count(*) FROM app_user WHERE profile_id = :profileId AND EXTRACT(YEAR FROM created_at)", nativeQuery = true)
     int countUsersByProfileNameAndYear(Long profileId, int currentYear);
 
-    @Query(value = "SELECT u FROM app_user u WHERE u.email = : email", nativeQuery = true)
+    @Query(value = "SELECT * FROM app_user WHERE email = :email", nativeQuery = true)
     Optional<User> findByEmail(String email);
 
 }

@@ -6,7 +6,7 @@ import proyecto.spring.asugestionsocios.model.entity.Phone;
 
 @Mapper(componentModel = "spring")
 public interface PhoneMapper {
-    Phone toEntity(PhoneDTO phoneDTO);
-    PhoneDTO toDto(Phone phone);
-    Phone toEntityRequest(PhoneRequestDTO phoneRequestDTO);
+    Phone toEntity(ContactDTO contactDTO);
+    ContactDTO toDto(Phone phone);
+    Phone toEntityRequest(ContactCreateDTO contactCreateDTO);
 }

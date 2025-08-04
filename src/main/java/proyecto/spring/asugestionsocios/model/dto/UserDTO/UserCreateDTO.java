@@ -64,7 +64,7 @@ public class UserCreateDTO {
     @NotBlank(message = "Password is mandatory")
     @Size(min = 8, message = "Password must be at leats 8 characters long")
     @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)[A-Za-z\\\\d]{8,}$",
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,}$",
             message = "Password must be at least 8 characters long, and include at least one uppercase letter, one lowercase letter, and one number")
     @Schema(example = "john123d", description = "User's Password")
     private String password;
@@ -75,8 +75,8 @@ public class UserCreateDTO {
 
     @NotNull(message = "Phones is mandatory")
     @Size(min = 1, message = "At least one phone is required")
-    @ArraySchema(schema = @Schema(implementation = PhoneRequestDTO.class))
-    private List<PhoneRequestDTO> phones = new ArrayList<>();
+    @ArraySchema(schema = @Schema(implementation = ContactCreateDTO.class))
+    private List<ContactCreateDTO> phones = new ArrayList<>();
 
     @Schema(example = "TRUE", description = "Does User use Sign Language?. Member User Only")
     private Boolean usesSignLanguage = false;
@@ -89,4 +89,5 @@ public class UserCreateDTO {
 
     @Schema(example = "3", description = "User's Subcommittee Id. Member User Only")
     private Long subcommitteeId;
+
 }

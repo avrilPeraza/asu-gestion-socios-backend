@@ -13,7 +13,8 @@ import proyecto.spring.asugestionsocios.model.entity.*;
 import proyecto.spring.asugestionsocios.repository.ProfileRepository;
 import proyecto.spring.asugestionsocios.repository.SubcommitteeRepository;
 import proyecto.spring.asugestionsocios.repository.UserRepository;
-import proyecto.spring.asugestionsocios.service.PhoneService;
+import proyecto.spring.asugestionsocios.service.AuthenticationService;
+import proyecto.spring.asugestionsocios.service.ContactService;
 import proyecto.spring.asugestionsocios.service.UserService;
 import proyecto.spring.asugestionsocios.util.MemberNumberGenerator;
 
@@ -41,7 +42,10 @@ public class UserServiceTest {
     @Mock
     private MemberNumberGenerator memberNumberGenerator;
     @Mock
-    private PhoneService phoneService;
+    private ContactService contactService;
+
+    @InjectMocks
+    private AuthenticationService authService;
 
     @InjectMocks
     private UserService userService;
@@ -61,7 +65,7 @@ public class UserServiceTest {
         userCreateDTO.setHouseNumber("303");
         userCreateDTO.setPassword("12345476Hddg");
 
-        PhoneRequestDTO phone = new PhoneRequestDTO();
+        ContactCreateDTO phone = new ContactCreateDTO();
         phone.setNumber("099123456");
         phone.setPhoneType(PhoneType.MOBILE);
         phone.setLocationId(10L);
@@ -81,7 +85,7 @@ public class UserServiceTest {
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //Actuar
-        userService.createUser(userCreateDTO);
+        authService.createUser(userCreateDTO);
 
         //Afirmar
         verify(userRepository).save(userCaptor.capture());
@@ -111,7 +115,7 @@ public class UserServiceTest {
         userCreateDTO.setBelongsToCommittee(true);
         userCreateDTO.setSubcommitteeId(3L);
 
-        PhoneRequestDTO phone = new PhoneRequestDTO();
+        ContactCreateDTO phone = new ContactCreateDTO();
         phone.setNumber("099123456");
         phone.setPhoneType(PhoneType.MOBILE);
         phone.setLocationId(13L);
@@ -138,7 +142,7 @@ public class UserServiceTest {
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //Actuar
-        userService.createUser(userCreateDTO);
+        authService.createUser(userCreateDTO);
 
         //Afirmar
         verify(userRepository).save(userCaptor.capture());
@@ -263,10 +267,10 @@ public class UserServiceTest {
         locationDTO.setAreaCode("36");
         locationDTO.setCountry(countryDTO);
 
-        PhoneDTO phoneDTO = new PhoneDTO();
-        phoneDTO.setNumber("099123456");
-        phoneDTO.setPhoneType(PhoneType.MOBILE);
-        phoneDTO.setLocation(locationDTO);
+        ContactDTO contactDTO = new ContactDTO();
+        contactDTO.setNumber("099123456");
+        contactDTO.setPhoneType(PhoneType.MOBILE);
+        contactDTO.setLocation(locationDTO);
 
         UserDTO userDTO1 = new UserDTO();
         userDTO1.setFirstName("Juan");
@@ -285,12 +289,12 @@ public class UserServiceTest {
         userDTO1.setMemberNumber("SOC-2025-0001");
         userDTO1.setStatus(UserStatus.ACTIVE);
         userDTO1.setProfile(profileDTO1);
-        userDTO1.setPhones(List.of(phoneDTO));
+        userDTO1.setPhones(List.of(contactDTO));
 
-        PhoneDTO phoneDTO2 = new PhoneDTO();
-        phoneDTO2.setNumber("099123345");
-        phoneDTO2.setPhoneType(PhoneType.MOBILE);
-        phoneDTO2.setLocation(locationDTO);
+        ContactDTO contactDTO2 = new ContactDTO();
+        contactDTO2.setNumber("099123345");
+        contactDTO2.setPhoneType(PhoneType.MOBILE);
+        contactDTO2.setLocation(locationDTO);
 
         UserDTO userDTO2 = new UserDTO();
         userDTO2.setFirstName("Andres");
@@ -304,7 +308,7 @@ public class UserServiceTest {
         userDTO2.setHouseNumber("103");
         userDTO2.setStatus(UserStatus.ACTIVE);
         userDTO2.setProfile(profileDTO2);
-        userDTO2.setPhones(List.of(phoneDTO2));
+        userDTO2.setPhones(List.of(contactDTO2));
 
 
         when(userMapper.toDto(user1)).thenReturn(userDTO1);

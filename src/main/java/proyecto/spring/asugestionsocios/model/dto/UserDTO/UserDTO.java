@@ -62,8 +62,8 @@ public class UserDTO {
     @Schema(description = "User's Subcommittee. Member User Only", implementation = SubcommitteeDTO.class)
     private SubcommitteeDTO subcommittee;
 
-    @ArraySchema(schema = @Schema(implementation = PhoneRequestDTO.class))
-    private List<PhoneDTO> phones = new ArrayList<>();
+    @ArraySchema(schema = @Schema(implementation = ContactCreateDTO.class))
+    private List<ContactDTO> phones = new ArrayList<>();
 
     @Schema(example = "SOC-2025-0003", description = "User's Member Number. Member User Only")
     private String memberNumber;
