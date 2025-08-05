@@ -91,14 +91,14 @@ public class UserController {
     }
 
     @PutMapping("user/deactivation/{id}")
-    public ResponseEntity<String> userDeactivation(@PathVariable Long id, @RequestBody UserStatusUpdateDTO userStatusUpdateDTO){
-        String deactivation = userService.userDeactivation(id, userStatusUpdateDTO);
+    public ResponseEntity<String> userDeactivation(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
+        String deactivation = userService.userDeactivation(id, userStatusChangeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(deactivation);
     }
 
     @PutMapping("user/activation/{id}")
-    public ResponseEntity<String> userActivation(@PathVariable Long id, @RequestBody UserStatusUpdateDTO userStatusUpdateDTO){
-        String activation = userService.userActivation(id, userStatusUpdateDTO);
+    public ResponseEntity<String> userActivation(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
+        String activation = userService.userActivation(id, userStatusChangeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(activation);
     }
 }

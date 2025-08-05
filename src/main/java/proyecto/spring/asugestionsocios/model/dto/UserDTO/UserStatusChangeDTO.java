@@ -4,6 +4,6 @@ import lombok.Data;
 import proyecto.spring.asugestionsocios.model.entity.UserStatus;
 
 @Data
-public class UserStatusUpdateDTO {
+public class UserStatusChangeDTO {
     private UserStatus newStatus;
 }

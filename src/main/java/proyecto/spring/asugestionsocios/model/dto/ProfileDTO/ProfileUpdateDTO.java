@@ -8,9 +8,6 @@ import proyecto.spring.asugestionsocios.model.entity.Status;
 
 @Data
 public class ProfileUpdateDTO {
-    @NotNull(message = "Id is mandatory")
-    private Long id;
-
     @NotBlank(message = "Description is mandatory")
     @Size(min = 20, message = "Description must be between 20 and 1000 characters long")
     private String description;

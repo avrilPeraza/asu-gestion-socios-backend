@@ -127,17 +127,17 @@ public class UserService {
         return userMapper.toDto(userUpdated);
     }
 
-    public String userDeactivation(Long id, UserStatusUpdateDTO userStatusUpdateDTO){
+    public String userDeactivation(Long id, UserStatusChangeDTO userStatusChangeDTO){
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
-        user.setStatus(userStatusUpdateDTO.getNewStatus());
+        user.setStatus(userStatusChangeDTO.getNewStatus());
 
         userRepository.save(user);
         return "User account has been successfully deactivated.";
     }
 
-    public String userActivation(Long id, UserStatusUpdateDTO userStatusUpdateDTO){
+    public String userActivation(Long id, UserStatusChangeDTO userStatusChangeDTO){
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
-        user.setStatus(userStatusUpdateDTO.getNewStatus());
+        user.setStatus(userStatusChangeDTO.getNewStatus());
 
         userRepository.save(user);
         return "User account has been successfully activated.";
