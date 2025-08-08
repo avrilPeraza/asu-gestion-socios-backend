@@ -1,10 +1,12 @@
 package proyecto.spring.asugestionsocios.model.dto.ProfileDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Schema(description = "Profile creation model")
 public class ProfileCreateDTO {
     @NotBlank(message = "Name is mandatory")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters long")

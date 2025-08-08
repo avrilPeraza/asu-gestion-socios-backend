@@ -25,7 +25,6 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    //TODO: Verificar duplicados
     @PostMapping("/profile")
     public ResponseEntity<ApiResponse> createProfile(@Valid @RequestBody ProfileCreateDTO profileCreateDTO){
         profileService.createProfile(profileCreateDTO);

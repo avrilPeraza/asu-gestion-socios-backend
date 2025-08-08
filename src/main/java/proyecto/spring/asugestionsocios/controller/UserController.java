@@ -90,15 +90,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userUpdate);
     }
 
-    @PutMapping("user/deactivation/{id}")
-    public ResponseEntity<String> userDeactivation(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
-        String deactivation = userService.userDeactivation(id, userStatusChangeDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(deactivation);
-    }
-
-    @PutMapping("user/activation/{id}")
-    public ResponseEntity<String> userActivation(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
-        String activation = userService.userActivation(id, userStatusChangeDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(activation);
+    @PutMapping("user/status/{id}")
+    public ResponseEntity<String> updateUserStatus(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
+        String message = userService.updateUserStatus(id, userStatusChangeDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 }

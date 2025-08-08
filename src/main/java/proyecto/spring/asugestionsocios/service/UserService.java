@@ -3,6 +3,7 @@ package proyecto.spring.asugestionsocios.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import proyecto.spring.asugestionsocios.exception.BadRequestException;
 import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.mapper.UserMapper;
 import proyecto.spring.asugestionsocios.model.dto.UserDTO.*;
@@ -35,6 +36,11 @@ public class UserService {
         this.memberNumberGenerator = memberNumberGenerator;
     }
 
+    private User findUserByIdOrThrow(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: "+ id));
+    }
+
     public List<UserDTO> getAllUsers(){
         List<User> users = userRepository.findAll();
 
@@ -47,14 +53,12 @@ public class UserService {
     }
 
     public UserDTO getUserById(Long id){
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("User with ID: " + id + " does not exist."));
-
+        User user = findUserByIdOrThrow(id);
         return userMapper.toDto(user);
     }
 
     public UserDTO personalDataUpdate(Long id, PersonalDataUpdateDTO personalDataUpdateDTO){
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
+        User existingUser = findUserByIdOrThrow(id);
 
         existingUser.setFirstName(personalDataUpdateDTO.getFirstName());
         existingUser.setLastName(personalDataUpdateDTO.getLastName());
@@ -66,7 +70,7 @@ public class UserService {
     }
 
     public UserDTO addressDataUpdate(Long id, AddressDataUpdateDTO addressDataUpdateDTO){
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
+        User existingUser = findUserByIdOrThrow(id);
 
         existingUser.setApartment(addressDataUpdateDTO.getApartment());
         existingUser.setHouseNumber(addressDataUpdateDTO.getHouseNumber());
@@ -78,10 +82,10 @@ public class UserService {
     }
 
     public UserDTO memberDataUpdate(Long id, MemberDataUpdateDTO memberDataUpdateDTO){
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
+        User existingUser = findUserByIdOrThrow(id);
 
         Profile profile = profileRepository.findById(memberDataUpdateDTO.getProfileId())
-                .orElseThrow(() -> new EntityNotFoundException("There's not a profile with ID: " + memberDataUpdateDTO.getProfileId()));
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + memberDataUpdateDTO.getProfileId()));
 
         if (Objects.equals(profile.getName(), existingUser.getProfile().getName())){
             throw new ConflictException("User already is a " + existingUser.getProfile().getName());
@@ -95,7 +99,7 @@ public class UserService {
         if (memberDataUpdateDTO.getBelongsToCommittee()) {
             Subcommittee subcommittee = subcommitteeRepository
                     .findById(memberDataUpdateDTO.getSubcommitteeId())
-                    .orElseThrow(() -> new EntityNotFoundException("There's not a subcommittee with ID: " + memberDataUpdateDTO.getSubcommitteeId()));
+                    .orElseThrow(() -> new EntityNotFoundException("Subcommittee not found with ID: " + memberDataUpdateDTO.getSubcommitteeId()));
 
             existingUser.setSubcommittee(subcommittee);
         }
@@ -116,30 +120,40 @@ public class UserService {
     }
 
     public UserDTO passwordUpdate(Long id, PasswordDataUpdateDTO passwordDataUpdateDTO){
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
+        User existingUser = findUserByIdOrThrow(id);
 
-        if (passwordEncoder.matches(existingUser.getPassword(), passwordDataUpdateDTO.getCurrentPassword())){
-            existingUser.setPassword(passwordDataUpdateDTO.getNewPassword());
+        if (!passwordEncoder.matches(existingUser.getPassword(), passwordDataUpdateDTO.getCurrentPassword())){
+            throw new BadRequestException("Current password is incorrect");
         }
 
+        if (!passwordEncoder.matches(existingUser.getPassword(), passwordDataUpdateDTO.getNewPassword())){
+            throw new BadRequestException("New password must be different from current password");
+        }
+
+        existingUser.setPassword(passwordDataUpdateDTO.getNewPassword());
         User userUpdated = userRepository.save(existingUser);
 
         return userMapper.toDto(userUpdated);
     }
 
-    public String userDeactivation(Long id, UserStatusChangeDTO userStatusChangeDTO){
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
+    public String updateUserStatus(Long id, UserStatusChangeDTO userStatusChangeDTO){
+        User user = findUserByIdOrThrow(id);
         user.setStatus(userStatusChangeDTO.getNewStatus());
 
-        userRepository.save(user);
-        return "User account has been successfully deactivated.";
-    }
+        User userUpdated = userRepository.save(user);
 
-    public String userActivation(Long id, UserStatusChangeDTO userStatusChangeDTO){
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a user with the ID: " + id));
-        user.setStatus(userStatusChangeDTO.getNewStatus());
+        if (!user.getStatus().name().equals(userStatusChangeDTO.getNewStatus().name())){
+            switch (userUpdated.getStatus()){
+                case ACTIVE -> {
+                    return "User account has been successfully activated.";
+                }
+                case INACTIVE -> {
+                    return "User account has been successfully deactivated.";
+                }
+                default -> throw new IllegalArgumentException("Invalid user status: " + userUpdated.getStatus());
+            }
+        }
 
-        userRepository.save(user);
-        return "User account has been successfully activated.";
+        return "User account is already " + user.getStatus().name();
     }
 }

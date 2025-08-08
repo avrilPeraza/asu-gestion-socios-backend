@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Schema(description = "Password change model")
 public class PasswordDataUpdateDTO {
     @NotBlank(message = "New Password is mandatory")
     @Size(min = 8, message = "Password must be at leats 8 characters long")

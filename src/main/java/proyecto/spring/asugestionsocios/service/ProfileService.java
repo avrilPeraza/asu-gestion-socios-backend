@@ -2,6 +2,7 @@ package proyecto.spring.asugestionsocios.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.mapper.ProfileMapper;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileCreateDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileDTO;
@@ -25,7 +26,15 @@ public class ProfileService {
         this.profileMapper = profileMapper;
     }
 
+    private Profile findProfileByIdOrThrow(Long id){
+        return profileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: "+ id));
+    }
+
     public void createProfile(ProfileCreateDTO profileCreateDTO){
+
+        if (profileRepository.existsProfileByName(profileCreateDTO.getName())) throw new ConflictException("The profile name is already registered");
+
         Profile newProfile = profileMapper.toEntityCreate(profileCreateDTO);
         newProfile.setStatus(Status.INACTIVE);
 
@@ -44,15 +53,12 @@ public class ProfileService {
     }
 
     public ProfileDTO getProfileById(Long id){
-        Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("There's not a profile with Id: " + id));
-
+        Profile profile = findProfileByIdOrThrow(id);
         return profileMapper.toDto(profile);
     }
 
     public ProfileDTO updateProfile(Long id, ProfileUpdateDTO profileUpdateDTO){
-        Profile profileExisting = profileRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("There's not a profile with Id: " + id));
+        Profile profileExisting = findProfileByIdOrThrow(id);
 
         profileExisting.setDescription(profileUpdateDTO.getDescription());
         profileExisting.setStatus(profileUpdateDTO.getStatus());
@@ -63,21 +69,24 @@ public class ProfileService {
     }
 
     public String updateProfileStatus(Long id, ProfileStatusChangeDTO profileStatusChangeDTO){
-        Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("There's not a profile with Id: " + id));
+        Profile profile = findProfileByIdOrThrow(id);
 
         profile.setStatus(profileStatusChangeDTO.getNewStatus());
 
         Profile profileUpdated = profileRepository.save(profile);
 
-        switch (profileUpdated.getStatus()){
-            case ACTIVE -> {
-                return "Profile " + profile.getName() + " has been successfully activated.";
+        if (!profile.getStatus().name().equals(profileStatusChangeDTO.getNewStatus().name())) {
+            switch (profileUpdated.getStatus()) {
+                case ACTIVE -> {
+                    return "Profile " + profile.getName() + " has been successfully activated.";
+                }
+                case INACTIVE -> {
+                    return "Profile " + profile.getName() + " has been successfully deactivated.";
+                }
+                default -> throw new IllegalArgumentException("Invalid profile status: " + profileUpdated.getStatus());
             }
-            case INACTIVE -> {
-                return "Profile " + profile.getName() + " has been successfully deactivated.";
-            }
-            default -> throw new IllegalArgumentException("Invalid profile status: " + profileUpdated.getStatus());
         }
+
+        return "Profile account is already " + profile.getStatus().name();
     }
 }

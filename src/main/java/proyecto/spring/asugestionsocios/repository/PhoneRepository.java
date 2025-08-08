@@ -10,4 +10,5 @@ import java.util.List;
 public interface PhoneRepository extends JpaRepository<Phone, Long> {
     @Query(value = "SELECT phone.number FROM phone WHERE phone.number IN :numbers", nativeQuery = true)
     List<String> findAllExistingNumbers(@Param("numbers") List<String> numbers);
+
 }
