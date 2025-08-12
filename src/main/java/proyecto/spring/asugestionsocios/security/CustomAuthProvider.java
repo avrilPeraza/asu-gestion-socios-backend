@@ -2,6 +2,7 @@ package proyecto.spring.asugestionsocios.security;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import proyecto.spring.asugestionsocios.model.UserDetailsImpl;
 import proyecto.spring.asugestionsocios.model.entity.User;
+import proyecto.spring.asugestionsocios.model.entity.UserStatus;
 import proyecto.spring.asugestionsocios.repository.UserRepository;
 
 @Component
@@ -17,6 +19,7 @@ public class CustomAuthProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public CustomAuthProvider(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
@@ -31,8 +34,12 @@ public class CustomAuthProvider implements AuthenticationProvider {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
 
+
+        if (user.getStatus() != UserStatus.ACTIVE){
+            throw new DisabledException("The user cannot access the system because the account is disabled.");
+        }
+
         if (!passwordEncoder.matches(password, user.getPassword())){
-            //TODO:Agregar handle method
             throw new BadCredentialsException("Invalid password");
         }
 

@@ -40,7 +40,7 @@ public class UserController {
             description = "Access to all user registered. Only public user data is accessed."
     )
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('OBTENER_USUARIOS')")
+    @PreAuthorize("hasAuthority('LISTAR_USUARIOS')")
     public ResponseEntity<List<UserDTO>> getAllUsers(){
         List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body(users);
@@ -54,36 +54,42 @@ public class UserController {
     }
 
     @PutMapping("/user/personal/{id}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_PERSONAL_USUARIO')")
     public ResponseEntity<UserDTO> personalDataUpdate(@Valid @PathVariable Long id, @RequestBody PersonalDataUpdateDTO personalDataUpdateDTO){
         UserDTO userUpdate = userService.personalDataUpdate(id, personalDataUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(userUpdate);
     }
 
     @PutMapping("/user/address/{id}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_DIRECCION_USUARIO')")
     public ResponseEntity<UserDTO> addressDataUpdate(@Valid @PathVariable Long id, @RequestBody AddressDataUpdateDTO addressDataUpdateDTO){
         UserDTO userUpdate = userService.addressDataUpdate(id, addressDataUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(userUpdate);
     }
 
     @PutMapping("/user/phone/{phoneId}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_CONTACTO_USUARIO')")
     public ResponseEntity<ContactDTO> updateContact(@Valid @PathVariable Long phoneId, @RequestBody ContactDataUpdateDTO contactDataUpdateDTO){
         ContactDTO contactUpdate = contactService.ContactDataUpdate(phoneId, contactDataUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(contactUpdate);
     }
 
     @PostMapping("/user/{userId}/phone")
+    @PreAuthorize("hasAuthority('CREAR_CONTACTO_USUARIO')")
     public ResponseEntity<proyecto.spring.asugestionsocios.model.ApiResponse> createContact(@Valid @PathVariable Long userId, @RequestBody List<ContactCreateDTO> contactDataUpdateDTO){
         contactService.createContacts(userId, contactDataUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(new proyecto.spring.asugestionsocios.model.ApiResponse("Phone/s registered successfully."));
     }
 
     @PutMapping("/user/member/{id}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_TIPO_USUARIO')")
     public ResponseEntity<UserDTO> memberDataUpdate(@Valid @PathVariable Long id, @RequestBody MemberDataUpdateDTO memberDataUpdateDTO){
         UserDTO userUpdate = userService.memberDataUpdate(id, memberDataUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(userUpdate);
     }
 
     @PutMapping("/user/password/{id}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_CONTRASENA_USUARIO')")
     public ResponseEntity<UserDTO> passwordUpdate(@Valid @PathVariable Long id, @RequestBody PasswordDataUpdateDTO passwordDataUpdateDTO){
         UserDTO userUpdate = userService.passwordUpdate(id, passwordDataUpdateDTO);
         //TODO:Change message
@@ -91,6 +97,7 @@ public class UserController {
     }
 
     @PutMapping("user/status/{id}")
+    @PreAuthorize("hasAuthority('ACTUALIZAR_ESTADO_USUARIO')")
     public ResponseEntity<String> updateUserStatus(@PathVariable Long id, @RequestBody UserStatusChangeDTO userStatusChangeDTO){
         String message = userService.updateUserStatus(id, userStatusChangeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(message);

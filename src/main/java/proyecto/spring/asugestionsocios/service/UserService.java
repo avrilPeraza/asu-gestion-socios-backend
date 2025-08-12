@@ -138,22 +138,24 @@ public class UserService {
 
     public String updateUserStatus(Long id, UserStatusChangeDTO userStatusChangeDTO){
         User user = findUserByIdOrThrow(id);
+
+        if (user.getStatus().name().equals(userStatusChangeDTO.getNewStatus().name())){
+            throw new ConflictException("User account is already " + user.getStatus().name());
+        }
+
         user.setStatus(userStatusChangeDTO.getNewStatus());
 
         User userUpdated = userRepository.save(user);
 
-        if (!user.getStatus().name().equals(userStatusChangeDTO.getNewStatus().name())){
-            switch (userUpdated.getStatus()){
-                case ACTIVE -> {
-                    return "User account has been successfully activated.";
-                }
-                case INACTIVE -> {
-                    return "User account has been successfully deactivated.";
-                }
-                default -> throw new IllegalArgumentException("Invalid user status: " + userUpdated.getStatus());
-            }
-        }
 
-        return "User account is already " + user.getStatus().name();
+        switch (userUpdated.getStatus()){
+            case ACTIVE -> {
+                return "User account has been successfully activated.";
+            }
+            case INACTIVE -> {
+                return "User account has been successfully deactivated.";
+            }
+            default -> throw new IllegalArgumentException("Invalid user status: " + userUpdated.getStatus());
+        }
     }
 }

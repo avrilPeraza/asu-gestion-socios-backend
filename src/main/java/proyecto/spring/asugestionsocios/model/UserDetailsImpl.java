@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import proyecto.spring.asugestionsocios.model.entity.PermissionState;
 import proyecto.spring.asugestionsocios.model.entity.User;
+import proyecto.spring.asugestionsocios.model.entity.UserStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,15 +23,15 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private String profile;
     private List<GrantedAuthority> authorities;
-    //private boolean isEnabled;
+    private boolean isEnabled;
 
-    public UserDetailsImpl(Long id, String email, String password, String profile, List<GrantedAuthority> authorities){
+    public UserDetailsImpl(Long id, String email, String password, String profile, List<GrantedAuthority> authorities, boolean isEnabled){
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.profile = profile;
-        //this.isEnabled = isEnabled;
+        this.isEnabled = isEnabled;
     }
 
     public static UserDetailsImpl build(User user){
@@ -39,13 +40,15 @@ public class UserDetailsImpl implements UserDetails {
                 .map(fea -> new SimpleGrantedAuthority(fea.getFeature().getName()))
                 .collect(Collectors.toList());
 
+        boolean enabled = user.getStatus() == UserStatus.ACTIVE;
+
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
                 user.getProfile().getName(),
-                authority
-                //user.getStatus() == UserStatus.ACTIVE
+                authority,
+                enabled
         );
     }
 
@@ -77,6 +80,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled(){
-        return true;
+        return isEnabled;
     }
 }

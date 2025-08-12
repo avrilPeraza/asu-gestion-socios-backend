@@ -6,9 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,9 +19,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
+public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler, AuthenticationFailureHandler {
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public AuthExceptionHandler(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
@@ -41,5 +49,27 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
         body.put("path", path);
 
         mapper.writeValue(response.getOutputStream(), body);
+    }
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+
+        String message;
+        if (exception instanceof DisabledException) {
+            message = "The user cannot access the system because the account is disabled.";
+        } else if (exception instanceof BadCredentialsException) {
+            message = "Invalid username or password.";
+        } else {
+            message = "Authentication failed: " + exception.getMessage();
+        }
+
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", message);
+
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+
+
     }
 }

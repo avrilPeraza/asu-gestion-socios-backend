@@ -2,14 +2,16 @@ package proyecto.spring.asugestionsocios.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import proyecto.spring.asugestionsocios.model.entity.*;
+import proyecto.spring.asugestionsocios.repository.FeatureProfileRepository;
+import proyecto.spring.asugestionsocios.repository.FeatureRepository;
 import proyecto.spring.asugestionsocios.exception.ConflictException;
 import proyecto.spring.asugestionsocios.mapper.ProfileMapper;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileCreateDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileStatusChangeDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileUpdateDTO;
-import proyecto.spring.asugestionsocios.model.entity.Profile;
-import proyecto.spring.asugestionsocios.model.entity.Status;
 import proyecto.spring.asugestionsocios.repository.ProfileRepository;
 
 import java.util.ArrayList;
@@ -20,10 +22,14 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final ProfileMapper profileMapper;
+    private final FeatureRepository featureRepository;
+    private final FeatureProfileRepository featureProfileRepository;
 
-    public ProfileService(ProfileRepository profileRepository, ProfileMapper profileMapper){
+    public ProfileService(ProfileRepository profileRepository, ProfileMapper profileMapper, FeatureRepository featureRepository, FeatureProfileRepository featureProfileRepository){
         this.profileRepository = profileRepository;
         this.profileMapper = profileMapper;
+        this.featureRepository = featureRepository;
+        this.featureProfileRepository = featureProfileRepository;
     }
 
     private Profile findProfileByIdOrThrow(Long id){
@@ -31,6 +37,7 @@ public class ProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: "+ id));
     }
 
+    @Transactional
     public void createProfile(ProfileCreateDTO profileCreateDTO){
 
         if (profileRepository.existsProfileByName(profileCreateDTO.getName())) throw new ConflictException("The profile name is already registered");
@@ -39,6 +46,27 @@ public class ProfileService {
         newProfile.setStatus(Status.INACTIVE);
 
         profileRepository.save(newProfile);
+
+        List<Feature> allFeature = featureRepository.findAll();
+
+
+
+        List<FeatureProfile> featureProfileList = allFeature.stream()
+                .map(feature -> {
+                    FeatureProfile p = new FeatureProfile();
+                    p.setProfile(newProfile);
+                    p.setFeature(feature);
+                    p.setHasPermissionState(PermissionState.DENIED);
+
+                    FeatureProfileId id = new FeatureProfileId();
+                    id.setProfileId(newProfile.getId());
+                    id.setFeatureId(feature.getId());
+
+                    p.setFeatureProfileId(id);
+                    return p;
+                }).toList();
+
+        featureProfileRepository.saveAll(featureProfileList);
     }
 
     public List<ProfileDTO> getAllProfiles(){
@@ -71,22 +99,22 @@ public class ProfileService {
     public String updateProfileStatus(Long id, ProfileStatusChangeDTO profileStatusChangeDTO){
         Profile profile = findProfileByIdOrThrow(id);
 
+        if (profile.getStatus().name().equals(profileStatusChangeDTO.getNewStatus().name())){
+            throw new ConflictException("Profile account is already " + profile.getStatus().name());
+        }
+
         profile.setStatus(profileStatusChangeDTO.getNewStatus());
 
         Profile profileUpdated = profileRepository.save(profile);
 
-        if (!profile.getStatus().name().equals(profileStatusChangeDTO.getNewStatus().name())) {
-            switch (profileUpdated.getStatus()) {
-                case ACTIVE -> {
-                    return "Profile " + profile.getName() + " has been successfully activated.";
-                }
-                case INACTIVE -> {
-                    return "Profile " + profile.getName() + " has been successfully deactivated.";
-                }
-                default -> throw new IllegalArgumentException("Invalid profile status: " + profileUpdated.getStatus());
+        switch (profileUpdated.getStatus()) {
+            case ACTIVE -> {
+                return "Profile " + profile.getName() + " has been successfully activated.";
             }
+            case INACTIVE -> {
+                return "Profile " + profile.getName() + " has been successfully deactivated.";
+            }
+            default -> throw new IllegalArgumentException("Invalid profile status: " + profileUpdated.getStatus());
         }
-
-        return "Profile account is already " + profile.getStatus().name();
     }
 }

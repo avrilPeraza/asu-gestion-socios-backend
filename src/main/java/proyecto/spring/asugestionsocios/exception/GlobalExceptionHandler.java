@@ -60,6 +60,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ErrorResponse> handlerDisabled(DisabledException ex, HttpServletRequest request){
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
+                request.getRequestURI(),
+                ex.getMessage(),
+                List.of("Please verify the provided information")
+
+        );
+
+        log.error("Entity not found: {}", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handlerValidationError(MethodArgumentNotValidException ex, HttpServletRequest request){
