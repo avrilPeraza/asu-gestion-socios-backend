@@ -11,6 +11,7 @@ import proyecto.spring.asugestionsocios.model.entity.*;
 import proyecto.spring.asugestionsocios.repository.ProfileRepository;
 import proyecto.spring.asugestionsocios.repository.SubcommitteeRepository;
 import proyecto.spring.asugestionsocios.repository.UserRepository;
+import proyecto.spring.asugestionsocios.util.Auditable;
 import proyecto.spring.asugestionsocios.util.MemberNumberGenerator;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: "+ id));
     }
 
+    @Auditable(operation = "LISTAR_USUARIOS")
     public List<UserDTO> getAllUsers(){
         List<User> users = userRepository.findAll();
 

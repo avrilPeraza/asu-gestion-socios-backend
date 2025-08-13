@@ -28,9 +28,6 @@ public class Audit {
     @Column(name = "terminal", nullable = false, length = 100)
     private String terminal;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
-    private String description;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "feature_id", nullable = false)
     @ToString.Exclude

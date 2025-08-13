@@ -1,4 +1,4 @@
-package proyecto.spring.asugestionsocios.Config;
+package proyecto.spring.asugestionsocios.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
