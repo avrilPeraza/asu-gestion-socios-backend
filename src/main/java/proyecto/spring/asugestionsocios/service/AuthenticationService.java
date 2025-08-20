@@ -108,6 +108,7 @@ public class AuthenticationService {
         }
     }
 
+    //@Auditable(operation = "USERS_LOGIN")
     public String authenticate(LoginUserDTO loginUserDTO){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -117,7 +118,6 @@ public class AuthenticationService {
         );
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
         return jwtUtils.generateTokenFromEmail(userDetails);
     }
 }

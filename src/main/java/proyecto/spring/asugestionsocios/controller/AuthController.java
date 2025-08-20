@@ -71,11 +71,7 @@ public class AuthController {
     )
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginUserDTO userLogin){
-        log.debug("Entro a login");
-        System.out.println("Entro a login");
         String token = authService.authenticate(userLogin);
-        log.debug("Salgo de login");
-        System.out.println("Salgo de login");
         return ResponseEntity.ok(new AuthResponse(token));
     }
 }

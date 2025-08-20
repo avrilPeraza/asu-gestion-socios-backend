@@ -3,6 +3,9 @@ package proyecto.spring.asugestionsocios.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import proyecto.spring.asugestionsocios.model.dto.FeatureDTO.AccessFeatureDTO;
+import proyecto.spring.asugestionsocios.model.dto.FeatureDTO.AccessFeatureProfileDTO;
+import proyecto.spring.asugestionsocios.model.dto.FeatureDTO.ProfileAccessDTO;
 import proyecto.spring.asugestionsocios.model.entity.*;
 import proyecto.spring.asugestionsocios.repository.FeatureProfileRepository;
 import proyecto.spring.asugestionsocios.repository.FeatureRepository;
@@ -13,6 +16,7 @@ import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileStatusChangeDTO;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileUpdateDTO;
 import proyecto.spring.asugestionsocios.repository.ProfileRepository;
+import proyecto.spring.asugestionsocios.util.Auditable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,7 @@ public class ProfileService {
     }
 
     @Transactional
+    @Auditable(operation = "PROFILE_CREATE")
     public void createProfile(ProfileCreateDTO profileCreateDTO){
 
         if (profileRepository.existsProfileByName(profileCreateDTO.getName())) throw new ConflictException("The profile name is already registered");
@@ -48,8 +53,6 @@ public class ProfileService {
         profileRepository.save(newProfile);
 
         List<Feature> allFeature = featureRepository.findAll();
-
-
 
         List<FeatureProfile> featureProfileList = allFeature.stream()
                 .map(feature -> {
@@ -69,6 +72,7 @@ public class ProfileService {
         featureProfileRepository.saveAll(featureProfileList);
     }
 
+    @Auditable(operation = "PROFILE_LIST")
     public List<ProfileDTO> getAllProfiles(){
         List<Profile> profiles = profileRepository.findAll();
 
@@ -80,11 +84,13 @@ public class ProfileService {
         return profileDTOS;
     }
 
+    @Auditable(operation = "PROFILE_LIST_ID")
     public ProfileDTO getProfileById(Long id){
         Profile profile = findProfileByIdOrThrow(id);
         return profileMapper.toDto(profile);
     }
 
+    @Auditable(operation = "PROFILE_UPDATE")
     public ProfileDTO updateProfile(Long id, ProfileUpdateDTO profileUpdateDTO){
         Profile profileExisting = findProfileByIdOrThrow(id);
 
@@ -96,6 +102,7 @@ public class ProfileService {
         return profileMapper.toDto(profileUpdated);
     }
 
+    @Auditable(operation = "PROFILE_UPDATE_STATUS")
     public String updateProfileStatus(Long id, ProfileStatusChangeDTO profileStatusChangeDTO){
         Profile profile = findProfileByIdOrThrow(id);
 
@@ -116,5 +123,59 @@ public class ProfileService {
             }
             default -> throw new IllegalArgumentException("Invalid profile status: " + profileUpdated.getStatus());
         }
+    }
+
+    @Auditable(operation = "PROFILE_ACCESS_FEATURE")
+    @Transactional
+    public ProfileAccessDTO accessFeature(Long profileId, AccessFeatureDTO accessFeatureDTO){
+        Profile profile = findProfileByIdOrThrow(profileId);
+
+        accessFeatureDTO.getPermissions().forEach((featureId, newPermission) -> {
+            Feature feature = featureRepository.findById(featureId)
+                    .orElseThrow(() -> new EntityNotFoundException("Feature not found with id: " + featureId));
+
+            FeatureProfile featureProfile = featureProfileRepository
+                    .findPermissionByProfileAndFeature(profile.getId(), feature.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("There's no relationship between profile " + profile.getName() +
+                            " and feature " + feature.getName()));
+
+            if (featureProfile.getHasPermissionState().equals(newPermission)){
+                throw new ConflictException("The profile " + profile.getName() +
+                        " already has the feature " + feature.getName() +
+                        " with state " + featureProfile.getHasPermissionState().name());
+            }
+
+            featureProfile.setHasPermissionState(newPermission);
+            featureProfileRepository.save(featureProfile);
+        });
+
+        List<FeatureProfile> featureProfile = featureProfileRepository.findAllByProfileId(profileId);
+
+        List<AccessFeatureProfileDTO> featuresDto = featureProfile.stream()
+                .map(fp -> new AccessFeatureProfileDTO(
+                        fp.getFeature().getId(),
+                        fp.getFeature().getName(),
+                        fp.getHasPermissionState()
+                ))
+                .toList();
+
+        return new ProfileAccessDTO(profile.getId(), profile.getName(), featuresDto);
+    }
+
+    @Auditable(operation = "PROFILE_GET_ACCESSES")
+    public ProfileAccessDTO getAccessFeature(Long profileId){
+        Profile profile = findProfileByIdOrThrow(profileId);
+
+        List<FeatureProfile> featureProfile = featureProfileRepository.findAllByProfileId(profileId);
+
+        List<AccessFeatureProfileDTO> featuresDto = featureProfile.stream()
+                .map(fp -> new AccessFeatureProfileDTO(
+                        fp.getFeature().getId(),
+                        fp.getFeature().getName(),
+                        fp.getHasPermissionState()
+                ))
+                .toList();
+
+        return new ProfileAccessDTO(profile.getId(), profile.getName(), featuresDto);
     }
 }

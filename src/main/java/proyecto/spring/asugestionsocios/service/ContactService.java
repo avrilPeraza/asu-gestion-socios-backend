@@ -14,6 +14,7 @@ import proyecto.spring.asugestionsocios.model.entity.User;
 import proyecto.spring.asugestionsocios.repository.LocationRepository;
 import proyecto.spring.asugestionsocios.repository.PhoneRepository;
 import proyecto.spring.asugestionsocios.repository.UserRepository;
+import proyecto.spring.asugestionsocios.util.Auditable;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class ContactService {
         this.userRepository = userRepository;
     }
 
+
     private void creatAndSaveContact(ContactCreateDTO contactCreateDto, User user){
         Location location = locationRepository.findById(contactCreateDto.getLocationId()).orElse(null);
         Phone newPhone = phoneMapper.toEntityRequest(contactCreateDto);
@@ -43,12 +45,14 @@ public class ContactService {
         phoneRepository.save(newPhone);
     }
 
+    @Auditable(operation = "PHONES_CREATE")
     public void createContactsUser(List<ContactCreateDTO> contactCreateDTOS, User user){
         for (ContactCreateDTO phoneDto : contactCreateDTOS){
            creatAndSaveContact(phoneDto, user);
         }
     }
 
+    @Auditable(operation = "PHONES_CREATE")
     public void createContacts(Long userId, List<ContactCreateDTO> contactCreateDTOS){
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("There's not user with " + userId));
 
@@ -59,6 +63,7 @@ public class ContactService {
         }
     }
 
+    @Auditable(operation = "PHONES_UPDATE")
     public ContactDTO ContactDataUpdate(Long id, ContactDataUpdateDTO contactDataUpdateDTO){
         Phone existingPhone = phoneRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("There's not a phone with the ID: " + id));
 

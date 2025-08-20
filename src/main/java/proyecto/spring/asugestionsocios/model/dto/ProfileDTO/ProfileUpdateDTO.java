@@ -12,8 +12,10 @@ import proyecto.spring.asugestionsocios.model.entity.Status;
 public class ProfileUpdateDTO {
     @NotBlank(message = "Description is mandatory")
     @Size(min = 20, message = "Description must be between 20 and 1000 characters long")
+    @Schema(example = "User profile for Admin", description = "Profile's description")
     private String description;
 
     @NotNull(message = "Status is mandatory")
+    @Schema(example = "ACTIVE", description = "Profile's status")
     private Status status;
 }

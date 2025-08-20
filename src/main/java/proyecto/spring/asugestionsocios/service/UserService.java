@@ -42,7 +42,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: "+ id));
     }
 
-    @Auditable(operation = "LISTAR_USUARIOS")
+    @Auditable(operation = "USERS_LIST")
     public List<UserDTO> getAllUsers(){
         List<User> users = userRepository.findAll();
 
@@ -54,11 +54,13 @@ public class UserService {
         return userDtos;
     }
 
+    @Auditable(operation = "USER_LIST_ID")
     public UserDTO getUserById(Long id){
         User user = findUserByIdOrThrow(id);
         return userMapper.toDto(user);
     }
 
+    @Auditable(operation = "USER_UPDATE_PERSONAL_DATA")
     public UserDTO personalDataUpdate(Long id, PersonalDataUpdateDTO personalDataUpdateDTO){
         User existingUser = findUserByIdOrThrow(id);
 
@@ -71,6 +73,7 @@ public class UserService {
         return userMapper.toDto(userUpdated);
     }
 
+    @Auditable(operation = "USERS_UPDATE_ADDRESS")
     public UserDTO addressDataUpdate(Long id, AddressDataUpdateDTO addressDataUpdateDTO){
         User existingUser = findUserByIdOrThrow(id);
 
@@ -83,6 +86,7 @@ public class UserService {
         return userMapper.toDto(userUpdated);
     }
 
+    @Auditable(operation = "USERS_UPDATE_USER_TYPE")
     public UserDTO memberDataUpdate(Long id, MemberDataUpdateDTO memberDataUpdateDTO){
         User existingUser = findUserByIdOrThrow(id);
 
@@ -121,6 +125,7 @@ public class UserService {
         return userMapper.toDto(userUpdated);
     }
 
+    @Auditable(operation = "USERS_UPDATE_PASSWORD")
     public UserDTO passwordUpdate(Long id, PasswordDataUpdateDTO passwordDataUpdateDTO){
         User existingUser = findUserByIdOrThrow(id);
 
@@ -138,6 +143,7 @@ public class UserService {
         return userMapper.toDto(userUpdated);
     }
 
+    @Auditable(operation = "USERS_UPDATE_STATUS")
     public String updateUserStatus(Long id, UserStatusChangeDTO userStatusChangeDTO){
         User user = findUserByIdOrThrow(id);
 
