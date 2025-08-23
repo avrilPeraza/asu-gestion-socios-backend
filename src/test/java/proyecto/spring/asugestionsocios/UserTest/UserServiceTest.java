@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import proyecto.spring.asugestionsocios.mapper.UserMapper;
 import proyecto.spring.asugestionsocios.model.dto.ProfileDTO.ProfileDTO;
 import proyecto.spring.asugestionsocios.model.dto.UserDTO.*;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +45,9 @@ public class UserServiceTest {
     private MemberNumberGenerator memberNumberGenerator;
     @Mock
     private ContactService contactService;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AuthenticationService authService;
@@ -83,6 +88,7 @@ public class UserServiceTest {
 
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         //Actuar
         authService.createUser(userCreateDTO);
@@ -94,6 +100,7 @@ public class UserServiceTest {
         assertEquals("juan.perez@example.com", savedUser.getEmail());
         assertEquals("65481140", savedUser.getDocument());
         assertEquals(UserStatus.UNVALIDATED, savedUser.getStatus());
+        assertEquals("encodedPassword", savedUser.getPassword());
     }
 
     @Test

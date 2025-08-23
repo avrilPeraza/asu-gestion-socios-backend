@@ -49,7 +49,6 @@ public class AuthenticationService {
         this.jwtUtils = jwtUtils;
     }
 
-
     @Transactional(rollbackFor = Exception.class)
     public void createUser(UserCreateDTO userCreateDTO){
 
