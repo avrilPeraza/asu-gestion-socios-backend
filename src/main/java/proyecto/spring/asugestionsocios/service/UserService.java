@@ -54,7 +54,7 @@ public class UserService {
         return userDtos;
     }
 
-    @Auditable(operation = "USER_LIST_ID")
+    @Auditable(operation = "USER_BY_ID")
     public UserDTO getUserById(Long id){
         User user = findUserByIdOrThrow(id);
         return userMapper.toDto(user);

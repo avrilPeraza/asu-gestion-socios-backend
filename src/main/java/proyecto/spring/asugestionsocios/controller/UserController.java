@@ -61,7 +61,7 @@ public class UserController {
             description = "Access to a user registered. Only public user data is accessed. Only a admin or the owner of the data can access it."
     )
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasAuthority('USER_LIST_ID')")
+    @PreAuthorize("hasAuthority('USER_BY_ID')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
         UserDTO user = userService.getUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);

@@ -107,7 +107,7 @@ public class ProfileController {
     })
     @Operation(
             summary = "Get all profiles",
-            description = "Access to all user registered. Access restricted to administrators only"
+            description = "Access to all profile registered. Access restricted to administrators only"
     )
     @GetMapping("profiles")
     @PreAuthorize("hasAuthority('PROFILE_LIST')")
@@ -126,11 +126,11 @@ public class ProfileController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     })
     @Operation(
-            summary = "Get a user by Id",
+            summary = "Get a profile by Id",
             description = "Access to a profile information. Only public profile data is accessed. Access restricted to administrators only."
     )
     @GetMapping("/profiles/{id}")
-    @PreAuthorize("hasAuthority('PROFILE_LIST_ID')")
+    @PreAuthorize("hasAuthority('PROFILE_BY_ID')")
     public ResponseEntity<ProfileDTO> getProfileById(@Valid @PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(profileService.getProfileById(id));
     }

@@ -84,7 +84,7 @@ public class ProfileService {
         return profileDTOS;
     }
 
-    @Auditable(operation = "PROFILE_LIST_ID")
+    @Auditable(operation = "PROFILE_BY_ID")
     public ProfileDTO getProfileById(Long id){
         Profile profile = findProfileByIdOrThrow(id);
         return profileMapper.toDto(profile);
