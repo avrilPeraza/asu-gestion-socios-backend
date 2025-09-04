@@ -2,16 +2,13 @@ package proyecto.spring.asugestionsocios.model.dto.FacilityDTO;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import proyecto.spring.asugestionsocios.model.entity.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-public class FacilityCreateDTO {
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters long")
-    private String name;
-
+public class FacilityUpdateDTO {
     @NotBlank(message = "Description is mandatory")
     @Size(min = 20, message = "Description must be between 20 and 1000 characters long")
     private String description;
@@ -34,4 +31,7 @@ public class FacilityCreateDTO {
 
     @Size(max = 1000)
     private String observations;
+
+    @NotNull(message = "Status is mandatory")
+    private Status status;
 }

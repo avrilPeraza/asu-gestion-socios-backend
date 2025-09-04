@@ -40,7 +40,7 @@ public class UserController {
     })
     @Operation(
             summary = "Get all users",
-            description = "Access to all user registered. Only public user data is accessed."
+            description = "Access to all users registered. Only public user data is accessed."
     )
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('USER_LIST')")

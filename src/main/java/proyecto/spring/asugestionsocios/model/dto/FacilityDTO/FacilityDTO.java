@@ -11,7 +11,7 @@ public class FacilityDTO {
     private Long id;
     private String name;
     private String description;
-    private Integer capacity;
+    private Short capacity;
     private BigDecimal nonMemberRate;
     private BigDecimal memberRate;
     private LocalDate priceEffectiveDate;

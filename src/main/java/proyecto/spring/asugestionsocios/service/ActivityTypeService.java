@@ -109,4 +109,9 @@ public class ActivityTypeService {
         ActivityType type = findActivityTypeByIdOrThrow(activityTypeId);
         return activityTypeMapper.toDto(type);
     }
+
+    @Auditable(operation = "ACTIVITY_TYPE_BY_ID")
+    public ActivityType getActivityTypeByIdEntity(Long activityTypeId){
+        return findActivityTypeByIdOrThrow(activityTypeId);
+    }
 }
