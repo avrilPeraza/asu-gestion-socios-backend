@@ -4,21 +4,8 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class ReservationCreateDTO {
-    @NotNull(message = "Date and time is mandatory")
-    @Future(message = "Date and time must be in the future")
-    private LocalDateTime dateTime;
-
-    @NotNull(message = "Duration is mandatory")
-    @Positive(message = "Duration must be a positive value")
-    //duration in hours
-    private Integer duration;
-
-    @NotNull(message = "Number of people is mandatory")
-    @Positive(message = "Number of people must be a positive value")
-    private Short numberPeople;
 
     @NotNull(message = "Total amount is mandatory")
     @Positive(message = "Total amount must be a positive value")
@@ -39,6 +26,6 @@ public class ReservationCreateDTO {
     @NotNull(message = "User is mandatory")
     private Long userId;
 
-    @NotNull(message = "Facility is mandatory")
-    private Long facilityId;
+    @NotNull(message = "Activity is mandatory")
+    private Long activityId;
 }

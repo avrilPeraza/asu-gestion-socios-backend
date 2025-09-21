@@ -21,5 +21,6 @@ public class ActivityDTO {
     private String observations;
     private Boolean hasInscription = false;
     private Status status;
+    private Short numberPeople;
     private ActivityType activityType;
 }

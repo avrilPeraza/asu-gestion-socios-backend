@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,31 +23,22 @@ public class Reservation {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "date_time", nullable = false)
-    private LocalDateTime dateTime;
-
-    @Column(name = "duration", nullable = false)
-    private Integer duration;
-
-    @Column(name = "number_people", nullable = false)
-    private Short numberPeople;
-
-    @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(name = "expiration_date_deposit", nullable = false)
+    @Column(name = "expiration_date_deposit")
     private LocalDate expirationDateDeposit;
 
-    @Column(name = "total_deposit", nullable = false, precision = 10, scale = 2)
+    @Column(name = "total_deposit", precision = 10, scale = 2)
     private BigDecimal totalDeposit;
 
-    @Column(name = "deposit_payment_date", nullable = false)
+    @Column(name = "deposit_payment_date")
     private LocalDate depositPaymentDate;
 
-    @Column(name = "deposit_paid", nullable = false, precision = 10, scale = 2)
+    @Column(name = "deposit_paid", precision = 10, scale = 2)
     private BigDecimal depositPaid;
 
-    @Column(name = "outstanding_balance", nullable = false, precision = 10, scale = 2)
+    @Column(name = "outstanding_balance", precision = 10, scale = 2)
     private BigDecimal outstandingBalance;
 
     @Column(name = "reservation_status", nullable = false, length = 20)
@@ -61,9 +51,9 @@ public class Reservation {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "facility_id", nullable = false)
+    @JoinColumn(name = "activity_id", nullable = false)
     @ToString.Exclude
-    private Facility facility;
+    private Activity activity;
 
     @OneToMany(mappedBy = "reservation")
     @ToString.Exclude

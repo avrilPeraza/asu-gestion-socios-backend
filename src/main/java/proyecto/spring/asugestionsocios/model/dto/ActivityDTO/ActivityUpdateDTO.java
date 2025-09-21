@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class ActivityUpdateDTO {
-    @NotNull(message = "Id is mandatory")
-    private Long id;
-
     @NotNull(message = "Status is mandatory")
     private Status status;
 
@@ -26,27 +23,28 @@ public class ActivityUpdateDTO {
     //duration in hours
     private Integer duration;
 
-    @NotNull(message = "Ticket cost is mandatory")
-    @Positive(message = "Ticket cost must be a positive value")
-    private BigDecimal ticketCost;
-
-    @NotNull(message = "Method of Payment is mandatory")
-    private MethodPayment methodPayment;
-
-    @NotNull(message = "Date and time is mandatory")
-    @Future(message = "Date and time must be in the future")
-    private LocalDateTime dateTime;
-
-    @NotNull(message = "Opening date is mandatory")
-    @Future(message = "Opening date must be in the future")
-    private LocalDateTime openingDateInscription;
-
-    @Size(max = 1000)
-    private String observations;
+    @NotNull(message = "Number of people is mandatory")
+    @Positive(message = "Number of people must be a positive value")
+    private Short numberPeople;
 
     @NotNull(message = "HasInscription is mandatory")
     private Boolean hasInscription = false;
 
     @NotNull(message = "Activity type is mandatory")
     private ActivityType activityType;
+
+    @NotNull(message = "Date and time is mandatory")
+    @Future(message = "Date and time must be in the future")
+    private LocalDateTime dateTime;
+
+    @Positive(message = "Ticket cost must be a positive value")
+    private BigDecimal ticketCost;
+
+    private MethodPayment methodPayment;
+
+    @Future(message = "Opening date must be in the future")
+    private LocalDateTime openingDateInscription;
+
+    @Size(max = 1000)
+    private String observations;
 }
