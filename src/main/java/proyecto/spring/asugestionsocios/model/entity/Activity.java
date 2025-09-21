@@ -32,17 +32,17 @@ public class Activity {
     @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    @Column(name = "ticket_cost", nullable = false, precision = 10, scale = 2)
+    @Column(name = "ticket_cost", precision = 10, scale = 2)
     private BigDecimal ticketCost;
 
-    @Column(name = "method_payment", nullable = false, length = 50)
+    @Column(name = "method_payment", length = 50)
     @Enumerated(EnumType.STRING)
     private MethodPayment methodPayment;
 
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(name = "opening_date_inscription", nullable = false)
+    @Column(name = "opening_date_inscription")
     private LocalDateTime openingDateInscription;
 
     @Column(name = "observations", length = Integer.MAX_VALUE)
@@ -65,6 +65,9 @@ public class Activity {
     @ToString.Exclude
     private Facility facility;
 
+    @Column(name = "number_people", nullable = false)
+    private Short numberPeople;
+
     @OneToMany(mappedBy = "activity")
     @ToString.Exclude
     private List<Enrollment> enrollments = new ArrayList<>();
@@ -72,5 +75,7 @@ public class Activity {
     @OneToMany(mappedBy = "activity")
     @ToString.Exclude
     private List<Payment> payments = new ArrayList<>();
+
+
 
 }

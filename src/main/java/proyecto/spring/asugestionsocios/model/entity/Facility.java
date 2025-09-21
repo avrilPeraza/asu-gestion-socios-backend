@@ -51,9 +51,4 @@ public class Facility {
     @OneToMany(mappedBy = "facility")
     @ToString.Exclude
     private List<Activity> activities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "facility")
-    @ToString.Exclude
-    private List<Reservation> reservations = new ArrayList<>();
-
 }

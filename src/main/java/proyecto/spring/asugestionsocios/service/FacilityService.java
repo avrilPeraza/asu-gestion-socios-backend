@@ -27,11 +27,13 @@ public class FacilityService {
         this.facilityMapper = facilityMapper;
     }
 
+    @Auditable(operation = "FACILITY_BY_ID")
     private Facility findFacilityByIdOrThrow(Long id){
         return facilityRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facility not found with ID: "+ id));
     }
 
+    @Auditable(operation = "FACILITY_CREATE")
     public void createFacility(FacilityCreateDTO facilityCreateDTO){
         if (facilityRepository.existsFacilityByName(facilityCreateDTO.getName())){
             throw new ConflictException("The facility name is already registered");
@@ -43,6 +45,7 @@ public class FacilityService {
         facilityRepository.save(newFacility);
     }
 
+    @Auditable(operation = "FACILITY_UPDATE")
     public FacilityDTO updateFacility(Long id, FacilityUpdateDTO facilityUpdateDTO){
         Facility existingFacility = findFacilityByIdOrThrow(id);
 
@@ -81,6 +84,7 @@ public class FacilityService {
         }
     }
 
+    @Auditable(operation = "FACILITY_LIST")
     public List<FacilityDTO> getAllFacilities(){
         List<Facility> facilities = facilityRepository.findAll();
 
@@ -101,5 +105,9 @@ public class FacilityService {
     @Auditable(operation = "FACILITY_BY_ID")
     public Facility getFacilityByIdEntity(Long facilityId){
         return findFacilityByIdOrThrow(facilityId);
+    }
+
+    public int getCapacity(Long id){
+        return facilityRepository.findCapacityById(id);
     }
 }
